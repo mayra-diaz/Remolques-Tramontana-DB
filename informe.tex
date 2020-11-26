@@ -1,0 +1,972 @@
+\documentclass[12pt]{report}
+\usepackage[spanish]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{fancyhdr}   
+\usepackage[shortlabels]{enumitem}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{lscape}
+\usepackage{rotating}
+\usepackage{epstopdf}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{makeidx}
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{float}
+\usepackage[toc,page]{appendix}
+\usepackage[htt]{hyphenat}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage{titlesec}
+\titleformat{\chapter}
+   {\huge\bfseries\scshape}{\thechapter.}{1em}{}
+
+\graphicspath{ {media/} }
+
+\pgfplotsset{compat=newest}
+\usepgfplotslibrary{units}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.98,0.98,0.98}
+
+\lstdefinestyle{NiceStyle}{
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codepurple},
+  keywordstyle=\color{blue},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codegreen},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+\lstdefinestyle{TableStyle}{
+  backgroundcolor=\color{backcolour},   
+  keywordstyle=\color{blue},
+  basicstyle=\ttfamily\footnotesize,
+  frame=single,
+  breakatwhitespace=true,         
+  breaklines=true,                 
+  keepspaces=true,                                
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+\author{Mayra Díaz Tramontana 201910147 \and 
+	            Paolo André Morey Tutiven 201910236 \and
+	            Joaquín Elías Ramírez Gutiérrez 201910277}
+\title{Proyecto - Base de Datos 1}
+
+
+% encabezados
+\lhead[]{CS2701- UTEC \\Base de Datos I}
+\chead[]{2020-2}
+\rhead[]{Prof. Teófilo Chambilla \\tchambilla@utec.edu.pe}
+\renewcommand{\headrulewidth}{0.5pt}
+\setlength{\headheight}{28pt} 
+
+% pie de pagina
+\rfoot[]{}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+
+% espacio entre párrafos
+\setlength{\parskip}{1em}
+
+\pagestyle{fancy}
+
+
+\begin{document}
+\onehalfspacing
+
+\begin{titlepage}
+  \centering
+  {\bfseries\Large Universidad de Ingeniería y Tecnología\par}
+  \vspace{0.5cm}
+  {\scshape\Large Ciencia de la Computación\par
+   \scshape\large Base de Datos I \par}
+  \vspace{0.5cm}
+  {\scshape\huge Base de Datos para la empresa REMOLQUES TRAMONTANA S.A.C\par}
+  \vspace{2mm}
+  \begin{figure}[h!]
+    \centering
+    \includegraphics[width=220px]{RT_logo.jpeg}
+  \end{figure}
+  \vspace{0.5cm}
+  \vfill
+  {\large Autores: \par}
+  { Mayra Díaz Tramontana 201910147\par}
+  { Paolo André Morey Tutiven 201910236\par}
+  { Joaquín Elías Ramírez Gutiérrez 201910277\par}
+  \vfill
+  {\large Octubre 2020 \par}
+\end{titlepage}
+\thispagestyle{fancy}
+
+\tableofcontents
+\newpage
+
+
+\chapter{Requisitos}
+\section{Introducción}
+Remolques Tramontana es una empresa con más de 20 años de experiencia en el rubro de la Fabricación, Reparación y Alquiler de Remolques y Semiremolques para carga en general, especialmente para cargas especiales, sobredimensionadas, peligrosas y de líquidos. Actualmente, su enfoque está en la fabricación de semiremolques de carga pesada, estos son a pedido y personalizados según la necesidad del cliente.
+
+\begin{itemize}
+  \item \textbf{Razón Social}: REMOLQUES TRAMONTANA S.A.C.
+  \item \textbf{RUC}: 20514038199
+  \item \textbf{Dirección}: Av. Ramiro Priale Mz A, Lt 10B, Huachipa, Lurigancho, Lima
+  \item \textbf{Página Web}: \href{https://remolquestramontana.com/}{https://remolquestramontana.com/}
+  \item \textbf{Facebook}: \href{https://www.facebook.com/RemolquesTramontana}{https://www.facebook.com/RemolquesTramontana}
+\end{itemize}
+
+\section{Descripción general de la organización/problema.}
+Remolques Tramontana actualmente tiene diversos problemas en la organización de la data de la empresa. La empresa tiene todas sus transacciones e información en hojas de cálculo en Excel, este método hace que las consultas sobre la empresa sean engorrosas y díficiles de realizar. Al ser una fábrica de maquinaria grande, la cantidad de productos, servicios y herramientas compradas por proyecto resulta alta. Además, puesto que llevan más de dos décadas en el mercado, su cartera de clientes es amplia y por ende, su historial también. Por lo mencionado, hacer un seguimiento a cada proyecto, compra, empresa, proveedor y demás, resulta un trabajo extra para la empresa, el cual podría ser optimizado al utilizar una base de datos.
+
+Otro problema de la empresa es la pérdida de información e inseguridad sobre la misma. Puesto que no tienen las hojas de cálculo actualizadas en la nube, todos los cambios realizados y el ingreso de data se maneja localmente por las personas encargadas. Estas además, tienen que compartirse y enviarse distintas versiones. Este proceso ha ocasionado en múltiples ocasiones pérdida de datos importantes. Por otro lado, al tener que pasar estos archivos (que son pesados), cada vez que otra persona en la empresa quiera verlos o manipularlos, hace perder mucho tiempo; pues no solo demoran en cargar, sino que no siempre los empleados cuentan con un internet estable que les permita realizar dicho procedimiento.
+
+\section{Necesidad/usos de la base de datos.}
+Remolques Tramontana tiene varios problemas que derivan del método actual del manejo de información. No cuentan con una base de datos ni data respaldada en la nube. La empresa afirma que encontrar información específica dentro de los documentos resulta pesado y toma mucho tiempo. Además, que sienten que su información no está segura. Usar una base de datos optimizaría sus procesos y transacciones. Esto reduciría el trabajo de las personas encargadas de la administración, y por ende aumentaría la productividad.
+
+\section{¿Cómo resuelve el problema hoy?}
+Actualmente resuelven el problema teniendo varias versiones de las hojas de cálculo en distintas computadoras e intercambiando versiones actualizadas entre la parte administrativa.
+
+\subsection{¿Cómo se almacenan/procesan los datos hoy?}
+Todos los datos son almacenados y procesados en hojas de Excel.
+
+\subsection{Flujo de datos}
+El ingreso de los datos se hace únicamente de forma manual por distintos empleados de la empresa. Al tener varias tablas, la información debe ser completada en todas independientemente, pues no están conectadas. Esto ocasiona que se ingrese de distinta forma y después no se reconozcan adecuadamente estos datos.
+
+\section{Descripción detallada del sistema}
+
+\subsection{Objetos de información actuales}
+La información almacenada en las hojas de cálculo actuales será insertada en la base de datos que se realizará en este proyecto.
+
+\subsection{Características y funcionalidades esperadas}
+La empresa espera que el sistema sea más seguro, rápido y fácil de utilizar. Se espera que la manipulación de la data sea accedida únicamente por el área de administración y que se realicen distintas consultas en la data, principalmente en base a la aplicación de filtros.
+
+\subsection{Tipos de usuarios existentes/necesarios}
+Remolques Tramontana cuenta con 5 áreas:
+\begin{enumerate}
+    \item Gerencia
+    \item Comercio
+    \item Logística
+    \item Fabricación
+    \item Seguridad y limpieza
+\end{enumerate}
+
+El área de Gerencia debe tener acceso a la manipulación y visualización total de la data. Y las áreas Comercio y Logística debe tener acceso parcial a la misma.
+
+          
+\subsection{Tipos de consulta, actualizaciones}
+Las consultas más frecuentes solicitadas por la empresa son:
+\begin{itemize}
+    \item Detalle del trabajo diario de los trabajadores del área de fabricación. Esto incluye materiales y máquinas utilizadas.
+    \item El trabajo total de los empleados del área de fabricación por fechas.
+    \item Total de compras por carrocería.
+    \item Stock de la empresa.
+\end{itemize}
+
+Las actualizaciones más frecuentes serán:
+\begin{itemize}
+    \item Compras realizadas.
+    \item Trabajo de los empleados del área de fabricación.
+\end{itemize}
+
+\subsection{Tamaño estimado de la base de datos}
+\emph{Calculado en base a bytes}
+\begin{table}[H]
+  \tiny
+  \begin{tabular}{cc|c|c|c|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Tabla}}    & \textbf{Longitud Atributos}               & \textbf{Longitud Registro} & \textbf{Cantidad} & \textbf{Total Registro} \\ \hline
+  \multicolumn{1}{|c|}{ContactoCliente}   & 4+80+4+60+8                               & 156                        & 30                & \textbf{4680}           \\ \hline
+  \multicolumn{1}{|c|}{ContactoProveedor} & 4+80+4+60+8                               & 156                        & 200               & \textbf{31200}          \\ \hline
+  \multicolumn{1}{|c|}{Cliente}           & 8+100+80                                  & 188                        & 30                & \textbf{5640}           \\ \hline
+  \multicolumn{1}{|c|}{Proveedor}         & 8+100+80+150+1                            & 339                        & 200               & \textbf{67800}          \\ \hline
+  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+8+8+25+25+8                 & 372                        & 15                & \textbf{5580}           \\ \hline
+  \multicolumn{1}{|c|}{Dirige}            & 4+8+1                                     & 13                         & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Compra}            & 4+100+8+8+2+8                             & 130                        & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Trabajo}           & 8+1+150+4+4                               & 167                        & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Maquina}           & 4+150                                     & 154                        & 15                & \textbf{2310}           \\ \hline
+  \multicolumn{1}{|c|}{Requiere}          & 100+8+1+2                                 & 111                        & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+8 & 167                        & 40                & \textbf{6680}           \\ \hline
+  \multicolumn{1}{|c|}{Asociado}          & 4+4+100                                   & 108                        & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Bien}              & 100+1+15+2+20                             & 138                        & 250               & \textbf{34500}          \\ \hline
+  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 158390                  \\ \cline{3-5} 
+  \end{tabular}
+  \end{table}
+Se estima un tamaño inicial de 158.390 KB (kilobytes).
+
+
+\begin{table}[]
+  \tiny
+  \begin{tabular}{cc|c|c|c|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Tabla}}    & \textbf{Longitud Atributos}               & \textbf{Longitud Registro} & \textbf{Cantidad} & \textbf{Total Registro} \\ \hline
+  \multicolumn{1}{|c|}{ContactoCliente}   & 4+80+4+60+8                               & 156                        & 3                 & \textbf{468}            \\ \hline
+  \multicolumn{1}{|c|}{ContactoProveedor} & 4+80+4+60+8                               & 156                        & 2                 & \textbf{312}            \\ \hline
+  \multicolumn{1}{|c|}{Cliente}           & 8+100+80                                  & 188                        & 3                 & \textbf{564}            \\ \hline
+  \multicolumn{1}{|c|}{Proveedor}         & 8+100+80+150+1                            & 339                        & 2                 & \textbf{678}            \\ \hline
+  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+8+8+25+25+8                 & 372                        & 1                 & \textbf{372}            \\ \hline
+  \multicolumn{1}{|c|}{Dirige}            & 4+8+1                                     & 13                         & 2550              & \textbf{33150}          \\ \hline
+  \multicolumn{1}{|c|}{Compra}            & 4+100+8+8+2+8                             & 130                        & 240               & \textbf{31200}          \\ \hline
+  \multicolumn{1}{|c|}{Trabajo}           & 8+1+150+4+4                               & 167                        & 1700              & \textbf{283900}         \\ \hline
+  \multicolumn{1}{|c|}{Maquina}           & 4+150                                     & 154                        & 1                 & \textbf{154}            \\ \hline
+  \multicolumn{1}{|c|}{Requiere}          & 100+8+1+2                                 & 111                        & 3400              & \textbf{377400}         \\ \hline
+  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+8 & 167                        & 12                & \textbf{2004}           \\ \hline
+  \multicolumn{1}{|c|}{Asociado}          & 4+4+100                                   & 108                        & 30                & \textbf{3240}           \\ \hline
+  \multicolumn{1}{|c|}{Bien}              & 100+1+15+2+20                             & 138                        & 6                 & \textbf{828}            \\ \hline
+  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 734270                  \\ \cline{3-5} 
+  \end{tabular}
+  \end{table}
+Se estima un crecimiento semestral de 734.270 KB (kilobytes).
+
+
+\section{Objetivos del proyecto}
+Los objetivos principales del proyecto son:
+\begin{enumerate}
+    \item Diseño adecuado de una base de datos para la empresa Remolques Tramontana.
+    \item Implementación de una base de datos que permita la escalabilidad de la empresa.
+    \item Organizar la data de la empresa de tal manera que facilite su análisis y actualización.
+    \item Optimizar la base de datos implementada y reducir los tiempos de respuesta y escritura.
+\end{enumerate}
+
+
+\section{Referencias del proyecto}
+\begin{itemize}
+  \item  Weddel, G. (2011). \textit{Translating Entity-Relationship to Relational Tables.} Personal Collection of G.
+  Weddel, David R. Cheriton School of Computer Science University of Waterloo. 
+  Recuperado de: \\  \href{https://bit.ly/2WsTmqD}{https://bit.ly/2WsTmqD}
+  \item Ramakrishnan, R. \& Gehrke, J. (2003). \textit{Database management systems: (3rd ed)}. Boston: McGraw-Hill.
+\end{itemize}
+
+\section{Eventualidades}
+\subsection{Problemas que pudieran encontrarse en el proyecto}
+\subsubsection{Data}
+Puesto que la información en los cuadros de Excel muchas veces está incompleta por las múltiples pérdidas de data, y que la organización y relación de estas no está bien definida, rellenar la base de datos con datos previos podría resultar engorroso. Además, no se podrá tener un registro histórico de la información de la empresa.
+
+\subsubsection{Carrorecía}
+Puesto que la placa se saca después de tener la carrocería terminada, podría ser un problema al momento de registrar las compras asociadas a una determinada carrocería. Esto es porque las compras se hacen al momento de la fabricación, por eso probablemente se deba implementar un id. De esta manera se evitaría una posible pérdida de data.
+
+\subsection{Límites y alcances del proyecto}
+\textbf{Alcances}:\\
+El proyecto presentará una forma de organización de data óptima, que representa una solución para la empresa Remolques Tramontana.
+
+\textbf{Limitaciones}:\\
+La data de la empresa actualmente está desorganizada e incompleta.
+
+
+
+\chapter{Entidad-Relación}
+Para el diagrama del  relacional se hace uso del software draw.io.
+
+\section{Reglas semánticas}
+\begin{itemize}
+  \item Los clientes y proveedores son únicamente personas jurídicas.
+  \item Por cada cliente y proveedor existe mínimo una persona dentro de dicha empresa con la que se realizan las transacciones y toda la comunicación en general.
+  \item Las personas de contacto con las empresas pertenecen a una sola empresa. Se necesita saber su dni, celular, correo electrónico y nombre.
+  \item Se venden carrocerías, cada venta es de una sola carrocería.
+  \item Las carrocerías tienen una placa y código vin único. También tienen una carga útil, peso neto, peso bruto (suma de los dos primeros), color, categoría, tipo de carrocería, número de ejes y de llantas, ancho, largo y alto.
+  \item Todas las ventas/compras se realizan por facturas, las que se identifican por su número.
+  \item Las carrocerías son hechas a pedido, son personalizadas y se vende una por factura.
+  \item No hay stock de carrocerías, pero sí de algunos materiales.
+  \item Existen materiales y servicios que son comprados específicamente para una determinada carrocería, es necesario identificar estas compras.
+  \item Para fabricar una carrocería se requieren productos y servicios. Estos también están agrupados por categorías.
+  \item Los proveedores son únicamente o de productos o de servicios.
+  \item Siempre se almacena la ubicación, razón social y RUC de las empresas.
+  \item Los empleados están dividos en áreas. De cada uno se necesita saber su fecha de nacimiento, número de cuenta BCP, cargo, sueldo, dirección, correo electrónico, nombre, celular y dni.
+  \item Se necesita contabilizar las horas de trabajo de los trabajadores en fabricación, estos utilizan la maquinaria.
+  \item Las máquinas funcionan independientemente, se utiliza una por trabajo.
+  \item En un día, un empleado puede trabajar con varias máquinas haciendo distintos trabajos.
+  \item La mayoría de máquinas utilizan materiales. Las maquinarias se identifican por un código y tienen una descripción.
+\end{itemize}
+
+\section{Entidad-Relación}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Entidad-Relacion-RT.pdf}
+\end{figure}
+
+El diagrama fue realizado con el software draw.io. Para apreciarlo mejor, consultar el \hyperlink{A:MER}{ \textbf{Anexo A}}
+
+\section{Especificaciones y consideraciones sobre el modelo}
+\textbf{\large Persona}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de una persona vinculada a la empresa. Cada persona se identifica con su dni.
+  \item \textbf{Consideraciones:} Es superclase de Contacto y Empleado. No hay solapamiento entre dichas entidades, hay cobertura.
+\end{enumerate}
+\textbf{\large Empleado}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de un empleado dentro de la empresa, quienes están agrupados en áreas.
+  \item \textbf{Consideraciones:} Es subclase de Persona.
+\end{enumerate}
+\textbf{\large Contacto}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de un contacto proveniente de un cliente o un proveedor.
+  \item \textbf{Consideraciones:} Es subclase de Persona, solo puede estar asociado a una empresa.
+\end{enumerate}
+\textbf{\large Empresa}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de la empresa con la que se relaciona Remolques Tramontana, se identifican con el RUC.
+  \item \textbf{Consideraciones:} Es superclase de Cliente y Proveedor. No hay solapamiento entre dichas entidades, hay cobertura.
+\end{enumerate}
+\textbf{\large Cliente}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información del cliente que solicita una carrocería.
+  \item \textbf{Consideraciones:} Es subclase de Empresa. 
+\end{enumerate}
+\textbf{\large Proveedor}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información del proveedor que le brinda productos o servicios a Remolques Tramontana. Un proveedor puede ser o de productos o de servicios.
+  \item \textbf{Consideraciones:}  Es subclase de Empresa.
+\end{enumerate}
+\textbf{\large Carrocería}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información del producto solicitado por un cliente.
+  \item \textbf{Consideraciones:} Cada carrocería es única y tiene características distintas, pues son hechas a pedido y personalizadas. Se identifican por la placa y el código vin.
+\end{enumerate}
+\textbf{\large Compra}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de las compras realizadas por producto y proovedor.
+  \item \textbf{Consideraciones:} Cada compra es realizada a un único proveedor. Es débil de Bien porque cada compra identifica a un bien dentro de una factura, por lo que la llave es el bien que se está adquiriendo (producto o servicio), y el número de factura de la compra.
+\end{enumerate}
+\textbf{\large Bien}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena productos y servicios adquiridos por la empresa.
+  \item \textbf{Consideraciones:} Están clasificados, algunos pueden tener stock. Puede ser o producto o servicio, y están medidos en distintas unidades (kilos, galones, entre otros).
+\end{enumerate}
+\textbf{\large Trabajo}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de los trabajos realizados por los empleados de fabricación por día.
+  \item \textbf{Consideraciones:} Un empleado puede trabajar con más de una máquina al día. Algunos trabajos requieren el uso de ciertos bienes. Es necesario contabilizar las horas de uso de las máquinas y de trabajo de los empleados.
+\end{enumerate}
+\textbf{\large Máquina}
+\begin{enumerate}[label=\arabic*)]
+  \item \textbf{Especificaciones:} Almacena la información de las máquinas poseídas por la empresa.
+  \item \textbf{Consideraciones:} Se identifican por un código único.
+\end{enumerate}
+
+
+\chapter{Modelo Relacional}
+ \section{Modelo Relacional}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Modelo-Relacional-RT.pdf}
+\end{figure}
+
+El diagrama fue realizado con el software draw.io. Para apreciarlo mejor, consultar el \hyperlink{A:MR}{ \textbf{Anexo B}}
+
+\begin{itemize}
+    \item \textbf{\textcolor{ForestGreen}{ContactoCliente}}(
+    \textcolor{Blue}{\underline{dni:int},  \textcolor{ForestGreen}{Cliente}.RUC,  nombre:string, celular:int,\\ correo:string})
+    
+    \item \textbf{\textcolor{ForestGreen}{ContactoProveedor}}(
+    \textcolor{Blue}{\underline{dni:int},  \textcolor{ForestGreen}{Proveedor}.RUC,  nombre:string, celular:int, correo:string})
+    
+    \item \textbf{\textcolor{ForestGreen}{Empleado}}(
+    \textcolor{Blue}{\underline{dni:int}, nombre:string,  celular:int, correo:string,  direccion:string,  nacimiento:datetime, nCuenta:int, area:string, cargo:string, sueldo:float})
+    
+    \item \textbf{\textcolor{ForestGreen}{Cliente}}(
+    \textcolor{Blue}{\underline{RUC:int}, ubicacion:string, razonSocial:string})
+    
+    \item \textbf{\textcolor{ForestGreen}{Proveedor}}(
+    \textcolor{Blue}{\underline{RUC:int}, ubicacion:string, razonSocial:string, descripcion:string, esDeProducto:boolean})
+    
+    \item \textbf{\textcolor{ForestGreen}{Compra}}(
+    \textcolor{Blue}{\underline{nFactura:int}, \underline{\textcolor{ForestGreen}{Bien}.descripcion:string}, fecha:datetime, precioUnitario:float, cantidad:int, \textcolor{ForestGreen}{Proveedor}.RUC})
+    
+    \item \textbf{\textcolor{ForestGreen}{Bien}}(
+    \textcolor{Blue}{\underline{descripcion:string}, esProducto:bool, clasificacion:string, stock:int, unidades:string})
+    
+    \item \textbf{\textcolor{ForestGreen}{Carroceria}}(
+    \textcolor{Blue}{\underline{id:int}, placa:string vin:string, categoria:string, carroceria:string, largo:float, ancho:float, alto:float, nEjes:int, nLlantas:int, color:string, cargaUtil:float, pesoNeto:float, \textcolor{ForestGreen}{Cliente}.RUC:int, nFactura:int, precio:float, medioPago:string, alContado:bool, deuda:float, fecha:datetime})
+    
+    \item \textbf{\textcolor{ForestGreen}{Trabajo}}(
+    \textcolor{Blue}{\underline{fecha:datetime}, \underline{numero:int}, descripcion:string, horas:float, \textcolor{ForestGreen}{Maquina}.codigo.int})
+    
+    \item \textbf{\textcolor{ForestGreen}{Maquina}}(
+    \textcolor{Blue}{\underline{codigo:int}, descripcion:string})
+    
+    \item \textbf{\textcolor{ForestGreen}{Dirige}}(
+    \textcolor{Blue}{\underline{\textcolor{ForestGreen}{Empleado}.dni:int}, \underline{\textcolor{ForestGreen}{Trabajo}.fecha:datetime}, \underline{\textcolor{ForestGreen}{Trabajo}.numero:int}})
+    
+    \item \textbf{\textcolor{ForestGreen}{Requiere}}(
+    \textcolor{Blue}{\underline{\textcolor{ForestGreen}{Trabajo}.fecha:datetime}, \underline{\textcolor{ForestGreen}{Trabajo}.numero:int},
+    \underline{\textcolor{ForestGreen}{Bien}.descripcion:string}, cantidad:int})
+    
+    \item \textbf{\textcolor{ForestGreen}{Asociado}}(
+    \textcolor{Blue}{\underline{\textcolor{ForestGreen}{Carroceria}.placa:string}, \underline{\textcolor{ForestGreen}{Compra}.nFactura:int}, \\ \underline{\textcolor{ForestGreen}{Compra.Bien}.descripcion:string}})
+\end{itemize}
+
+
+\section{Especificaciones de transformación}
+\subsection{Entidades}
+\textbf{Carrocería} \\
+Es una entidad que se identifica con un id serial (llave primaria), esto es porque al momento de empezar la fabricación de una carrocería aún no se tiene la placa ni el vin. Tiene también una llave foránea que es el RUC de un cliente. Con esto obviamos la relación que existía entre Carrorecería y Cliente, que es Adquiere. Además, cuenta con los siguientes atributos: placa, vin, categoría, carrocería, peso neto, carga útil, color, largo, alto, ancho, número de ejes y número de llantas. Por último, cuenta con peso bruto, que es un atributo derivado. \\\\
+\textbf{Bien} \\
+Es una entidad que tiene como llave primaria una descripción. Además, sus demás atributos son los sigueintes: unidades, stock, clasificación y esProducto.\\\\
+\textbf{Trabajo} \\ 
+Es una entidad que tiene como llave primaria un número y una fecha. Cuenta también con un número de horas y una descripción. Además, cuenta con una llave foránea que es el código de Máquina, por lo que obviamos en el modelo relacional la relación que existía entre ellas, que es Utiliza. \\\\
+\textbf{Máquina} \\
+Es una entidad que se identifica mediante un código (llave de primaria) y además cuenta con un atributo llamado descripción.
+\subsection{Entidades débiles}
+\textbf{Compra} \\
+Es una entidad débil de la entidad Bien, por lo que su llave depende de la llave primaria de bien (descripción, obviamos la relación vieneDe del modelo ER) y su propia llave, que es número de factura. Existe también una llave foránea que es el RUC del proveedor y de esta forma, ignoramos la relación provee en nuestro modelo relacional. Además, cuenta con los siguientes atributos adicionales: fecha, precio unitario, precio total y cantidad.
+
+\subsection{Entidades superclase/subclases}
+\textbf{Persona (superclase)}\\
+Una persona es identificada mediante un único DNI. Además, cuenta con los atributos de nombre, correo electrónico y número de celular. Debido a que en nuestro modelo no hay solapamiento de los hijos de esta entidad y existe cobertura, decidimos obviar esta entidad en el modelo Entidad-Relación e incluimos sus atributos en Empleado y Contacto. \\\\
+\textbf{Empleado (subclase)}\\
+Su llave primaria depende de la Superclase Persona, siendo esta el DNI y cuenta con los siguientes atributos adicionales: nacimiento, dirección, número de cuenta, sueldo, cargo en la empresa y el área en el que trabaja. \\\\
+\textbf{Contacto (subclase)}\\
+Es la segunda clase dependiente de Persona teniendo como llave primaria DNI, al igual que Empleado. Además, tiene una llave foránea que es el RUC de empresa, debido a esto, obviamos la relación comunica del modelo entidad relación al modelo relacional. No cuenta con atributos adicional más que los de la Superclase Persona. Puesto que la entidad Empresa también fue obviada, se ha dividido Contacto en dos tablas:
+\begin{itemize}
+    \item ContactoCliente
+    \item ContactoProveedor
+\end{itemize}
+Estas tablas almacenan el RUC ya sea de cliente o de proveedor, mantienen el resto de atributos igual.
+\textbf{Empresa (superclase)}\\
+Las empresas se identifica mediante un RUC único para cada una de ellas. Además, es una superclase y cuenta con otros dos atributos que son ubicación y razón social. No hay solapamiento entre las subclases y existe cobertura.Sin embargo, existe una relación con Contacto, este problema se resuelve diviendo dicha entidad. Por lo tanto, se obvia la existencia de Empresa.\\\\
+\textbf{Cliente (subclase)}\\
+Es una subclase de Empresa, mas en el modelo relacional se obvia esta característica por la eliminación de la entidad Empresa. Su llave primaria es el RUC de empresa y cuenta con los atributos ubicación y razón social.\\\\
+\textbf{Proveedor (subclase)} \\
+Es una subclase de Empresa, mas en el modelo relacional se obvia esta característica por la eliminación de la entidad Empresa. Su llave primaria es el RUC de empresa y cuenta con los atributos ubicación, razón social, esDeProducto y descripción. \\\\
+\subsection{Relaciones binarias}
+\textbf{Dirige}\\
+Es una relación binaria entre Trabajo y Empleado. Hay una participación de 0 a N por parte de Empleado y de 1 a N por parte de trabajo.\\\\
+\textbf{Requiere}\\
+Es una relacion binaria entre Trabajo y Bien, tiene un atributo descriptivo llamado cantidad y las participaciones son de 0 a N por parte de las dos entidades.\\\\
+\textbf{Asociado}\\
+Es una relación binaria entre Carrocería y Compra. La participación es de 1 a N por parte de Carrocería y de 0 a N por parte de Compra.\\\\
+
+\subsection{Relaciones ternarias y agregación}
+No contamos con relaciones ternarias ni de agragación.
+
+
+\section{Diccionario de datos}
+\subsection{ContactoCliente}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                                 \\ \hline
+  dni            & int                   & \multicolumn{1}{c|}{X}           & \multicolumn{1}{c|}{}            & DNI de la persona                                    \\ \hline
+  nombre         & varchar               & \multicolumn{1}{c|}{}            &                                  & Nombre de la persona de contacto                     \\ \hline
+  celular        & int                   &                                  &                                  & Celular de la persona de contacto                    \\ \hline
+  correo         & varchar               &                                  &                                  & Correo electrónico de la persona de contacto         \\ \hline
+  Cliente.RUC    & bigint                &                                  & \multicolumn{1}{c|}{X}           & RUC de la empresa vinculada a la persona de contacto \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{ContactoProveedor}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                                 \\ \hline
+  dni            & int                   & \multicolumn{1}{c|}{X}           & \multicolumn{1}{c|}{}            & DNI de la persona                                    \\ \hline
+  nombre         & varchar               & \multicolumn{1}{c|}{}            &                                  & Nombre de la persona de contacto                     \\ \hline
+  celular        & int                   &                                  &                                  & Celular de la persona de contacto                    \\ \hline
+  correo         & varchar               &                                  &                                  & Correo electrónico de la persona de contacto         \\ \hline
+  Proveedor.RUC  & bigint                &                                  & \multicolumn{1}{c|}{X}           & RUC de la empresa vinculada a la persona de contacto \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Cliente}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \textbf{PK} & \textbf{FK} & \textbf{Descripción}                   \\ \hline
+  RUC            & bigint                & X           &             & RUC de la empresa vinculada al cliente \\ \hline
+  ubicacion      & varchar               &             &             & RUC de la empresa vinculada al cliente \\ \hline
+  razonSocial    & varchar               &             &             & RUC de la empresa vinculada al cliente \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Proveedor}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                                \\ \hline
+  RUC            & bigint                & \multicolumn{1}{c|}{X}           & \multicolumn{1}{c|}{}            & RUC de la empresa vinculada al cliente              \\ \hline
+  ubicacion      & varchar               &                                  &                                  & RUC de la empresa vinculada al cliente              \\ \hline
+  razonSocial    & varchar               &                                  &                                  & RUC de la empresa vinculada al cliente              \\ \hline
+  descripcion    & varchar               &                                  &                                  & Descripción del proveedor                           \\ \hline
+  esDeProducto   & bool                  &                                  &                                  & Indica si un proveedor brinda servicios o productos \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Empleado}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                   \\ \hline
+  dni            & int                   & \multicolumn{1}{c|}{X}           &                                  & DNI del empleado                       \\ \hline
+  nombre         & varchar               &                                  &                                  & Nombre del empleado                    \\ \hline
+  celular        & int                   &                                  &                                  & Celular del empleado                   \\ \hline
+  correo         & varchar               &                                  &                                  & Correo electrónico del empleado        \\ \hline
+  direccion      & varchar               &                                  &                                  & Dirección del empleado                 \\ \hline
+  nacimiento     & datetime              &                                  &                                  & Fecha de nacimiento del empleado       \\ \hline
+  nCuenta        & bigint                &                                  &                                  & Número de cuenta bancaria del empleado \\ \hline
+  area           & varchar               &                                  &                                  & Área en donde trabaja el empleado      \\ \hline
+  cargo          & varchar               &                                  &                                  & Cargo que ocupa el empleado            \\ \hline
+  sueldo         & double precision      &                                  &                                  & Sueldo que recibe el empleado          \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Dirige}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \textbf{PK} & \textbf{FK} & \textbf{Descripción}         \\ \hline
+  Empleado.dni   & int                   & X           & X           & DNI del empleado asociado    \\ \hline
+  Trabajo.fecha  & datetime              & X           & X           & Fecha del trabajo asociado   \\ \hline
+  Trabajo.numero & tinyint               & X           & X           & Número de trabajos asociados \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Trabajo}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                      \\ \hline
+  fecha          & datetime              & \multicolumn{1}{c|}{X}           &                                  & Fecha de ejecución del trabajo            \\ \hline
+  numero         & tinyint               & \multicolumn{1}{c|}{X}           &                                  & Numero de trabajo por día (es secuencial) \\ \hline
+  descripcion    & varchar               &                                  &                                  & Descripción del trabajo                   \\ \hline
+  horas          & real                  &                                  &                                  & Horas de duración del trabajo             \\ \hline
+  Maquina.codigo & serial                &                                  & \multicolumn{1}{c|}{X}           & Código de la máquina asociada al trabajo  \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Máquina}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \textbf{PK}           & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}      \\ \hline
+  codigo         & int                   & X                     &                                  & Código de la máquina      \\ \hline
+  descripcion    & varchar               & \multicolumn{1}{l|}{} &                                  & Descripción de la máquina \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Compra}
+  \begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Campo}   & \textbf{Tipo de dato} & \textbf{PK}           & \textbf{FK}           & \textbf{Descripción}                              \\ \hline
+  nFactura         & int                   & X                     &                       & Número de factura asociada a la compra            \\ \hline
+  Bien.descripcion & varchar               & X                     & X                     & Descripción del bien asociado a la compra         \\ \hline
+  fecha            & datetime              &                       & \multicolumn{1}{l|}{} & Fecha de la compra                                \\ \hline
+  precioUnitario   & double precision      & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & Precio unitario de la compra                      \\ \hline
+  cantidad         & smallint              &                       & \multicolumn{1}{l|}{} & Cantidad de la compra                             \\ \hline
+  Proveedor.RUC    & bigint                & \multicolumn{1}{l|}{} & X                     & RUC de la empresa proveedora asociada a la compra \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Requiere}
+  \begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Campo}   & \textbf{Tipo de dato} & \textbf{PK}           & \textbf{FK}           & \textbf{Descripción}                      \\ \hline
+  Bien.descripcion & varchar               & X                     & X                     & Descripción del bien asociado             \\ \hline
+  Trabajo.fecha    & datetime              & X                     & X                     & Fecha de ejecución del trabajo            \\ \hline
+  Trabajo.numero   & tinyint               & X                     & X                     & Numero de trabajo por día (es secuencial) \\ \hline
+  cantidad         & smallint              & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & Cantidad utilizada del bien en el trabajo \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Carrocería}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|l|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \multicolumn{1}{c|}{\textbf{PK}} & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                           \\ \hline
+  id             & serial                & \multicolumn{1}{c|}{X}           & \multicolumn{1}{c|}{}            & Numero serial que identifica a la carrocería   \\ \hline
+  placa          & varchar               & \multicolumn{1}{c|}{}            & \multicolumn{1}{c|}{}            & Placa asociada a la carrocería                 \\ \hline
+  vin            & varchar               & \multicolumn{1}{c|}{}            & \multicolumn{1}{c|}{}            & Vin asociado a la carrocería                   \\ \hline
+  categoria      & varchar               & \multicolumn{1}{c|}{}            &                                  & Categoría a la que pertenece la carrocería     \\ \hline
+  carroceria     & varchar               & \multicolumn{1}{c|}{}            &                                  & Tipo de carrocería                             \\ \hline
+  largo          & double precision      & \multicolumn{1}{c|}{}            &                                  & Largo de la carrocería                         \\ \hline
+  ancho          & double precision      &                                  &                                  & Ancho de la carrocería                         \\ \hline
+  alto           & double precision      &                                  &                                  & Alto de la carrocería                          \\ \hline
+  nEjes          & smallint              &                                  &                                  & Número de ejes de la carrocería                \\ \hline
+  nLlantas       & smallint              &                                  &                                  & Número de llantas de la carrocería             \\ \hline
+  color          & varchar               &                                  &                                  & Color de la carrocería                         \\ \hline
+  cargaUtil      & double precision      &                                  &                                  & Carga útil de la carrocería                    \\ \hline
+  pesoNeto       & double precision      &                                  &                                  & Peso neto de la carrocería                     \\ \hline
+  Cliente.RUC    & bigint                &                                  & \multicolumn{1}{c|}{X}           & RUC de la empresa asociada a la carrocería     \\ \hline
+  nFactura       & int                   &                                  &                                  & Número de factura de la carrocería             \\ \hline
+  precio         & double precision      &                                  &                                  & Precio de la carrocería                        \\ \hline
+  medioPago      & varchar               &                                  &                                  & Medio de pago utilizado                        \\ \hline
+  alContado      & bool                  &                                  &                                  & Indica si el pago fue al contado o no          \\ \hline
+  fecha          & datetime              &                                  &                                  & Fecha de inicio de producción de la carrocería \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Asociado}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Campo}                       & \textbf{Tipo de dato} & \textbf{PK} & \textbf{FK} & \textbf{Descripción}                       \\ \hline
+  Carroceria.id & serial                & X           & X           & Placa asociada a la carrocería             \\ \hline
+  Compra.nFactura                      & int                   & X           & X           & Número de factura asociado a la carrocería \\ \hline
+  Compra.Bien.descripcion              & varchar               & X           & X           & Descripción del bien asociado a la compra  \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{Bien}
+\begin{table}[H]
+  \footnotesize
+  \begin{tabular}{|c|c|c|l|c|}
+  \hline
+  \textbf{Campo} & \textbf{Tipo de dato} & \textbf{PK}           & \multicolumn{1}{c|}{\textbf{FK}} & \textbf{Descripción}                              \\ \hline
+  descripcion    & varchar               & X                     & \multicolumn{1}{c|}{}            & Descripción del bien                              \\ \hline
+  esProducto     & bool                  &                       & \multicolumn{1}{c|}{}            & Indica si es un producto o un servicio            \\ \hline
+  unidades       & varchar               &                       &                                  & Unidades en las que se mide el bien (kg, m, etc.) \\ \hline
+  stock          & smallint              &                       &                                  & Cantidad de bienes en stock                       \\ \hline
+  clasificacion  & varchar               & \multicolumn{1}{l|}{} &                                  & Clasificación                                     \\ \hline
+  \end{tabular}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\chapter{Implementación de la base de datos}
+
+\section{Creación de Tablas en PostgreSQL}
+\iffalse
+\lstinputlisting[style=NiceStyle, language=sql]{baseDeDatos/creacion.sql}
+\fi
+\section{Carga de datos}
+\section{Simulación de Datos Faltantes}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Optimización y Experimentación}
+\section{Consultas SQL para el experimento}
+\subsection{Descripción del tipo de consultas seleccionadas}
+\subsection{Implementación de consultas en SQL}
+\iffalse
+\subsubsection*{Consulta 1}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta1/consulta1SQL.sql}
+
+\subsubsection*{Consulta 2}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta2/consulta2SQL.sql}
+
+\subsubsection*{Consulta 3}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/consulta3SQL.sql}
+
+\subsubsection*{Consulta 4}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta4/consulta4SQL.sql}
+\fi
+
+\section{Metodología del experimento}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Optimización de consultas}
+\iffalse
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/createIndice.sql}
+\fi
+
+\subsection{Planes de índices para Consulta 1}
+\iffalse
+\subsubsection{Ejecución con indices por default (PK) para 1000 datos}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
+  \caption{Ejecución de la consulta 1 para 1000 registros}
+\end{figure} 
+\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_1000/conIndByDefault/QUERYPLAN.txt}
+
+\subsubsection{Ejecución con indices por default (PK) para 10000 datos}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
+  \caption{Ejecución de la consulta 1 para 10000 registros}
+\end{figure} 
+\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_10000/conIndByDefault/QUERYPLAN.txt}
+
+\subsubsection{Ejecución con indices por default (PK) para 100000 datos}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
+  \caption{Ejecución de la consulta 1 para 100000 registros}
+\end{figure} 
+\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_100000/conIndByDefault/QUERYPLAN.txt}
+
+\subsubsection{Ejecución con indices por default (PK) para 1000000 datos}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=350px]{consultas/Consulta1/PS_1000000/ExplainGraphicalChanged.png}
+  \caption{Ejecución de la consulta 1 para 1000000 registros}
+\end{figure} 
+\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_1000000/conIndByDefault/QUERYPLAN.txt}
+\fi
+
+\subsection{ Planes de índices para Consulta 2}
+
+\subsection{ Planes de índices para Consulta 3}
+
+\subsection{ Planes de índices para Consulta 4}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Plataforma de Pruebas}
+\section{Medición de tiempos}
+\subsection{ Sin índices}
+\iffalse
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
+  1                  & 775                 \\ \hline
+  2                  & 861                 \\ \hline
+  3                  & 748                 \\ \hline
+  4                  & 749                 \\ \hline
+  5                  & 1031                \\ \hline
+  6                  & 924                 \\ \hline
+  7                  & 765                 \\ \hline
+  8                  & 1251                \\ \hline
+  9                  & 745                 \\ \hline
+  10                 & 743                 \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 1000 registros sin índices}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
+  1                  & 10893               \\ \hline
+  2                  & 10090               \\ \hline
+  3                  & 8574                \\ \hline
+  4                  & 8408                \\ \hline
+  5                  & 8124                \\ \hline
+  6                  & 8727                \\ \hline
+  7                  & 8556                \\ \hline
+  8                  & 8195                \\ \hline
+  9                  & 8459                \\ \hline
+  10                 & 9169                \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 10000 registros sin índices}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
+  1                  & 161137              \\ \hline
+  2                  & 171459              \\ \hline
+  3                  & 163214              \\ \hline
+  4                  & 146310              \\ \hline
+  5                  & 160778              \\ \hline
+  6                  & 126488              \\ \hline
+  7                  & 151738              \\ \hline
+  8                  & 174668              \\ \hline
+  9                  & 153993              \\ \hline
+  10                 & 169897              \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 100000 registros sin índices}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
+  1                  & 935584              \\ \hline
+  2                  & 1081505             \\ \hline
+  3                  & 1102141             \\ \hline
+  4                  & 1151704             \\ \hline
+  5                  & 1096683             \\ \hline
+  6                  & 1106174             \\ \hline
+  7                  & 1115339             \\ \hline
+  8                  & 1108338             \\ \hline
+  9                  & 1106591             \\ \hline
+  10                 & 1094102             \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 1000000 registros sin índices}
+\end{table}
+
+\pagebreak
+\pagebreak
+\fi
+\subsection{ Con índices}
+\iffalse
+\subsubsection*{1000 datos}
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
+  1                  & 139                  & 2733                 & 717                 & 149                  \\ \hline
+  2                  & 129                  & 1158                 & 615                 & 115                  \\ \hline
+  3                  & 134                  & 2009                 & 567                 & 174                  \\ \hline
+  4                  & 171                  & 973                  & 614                 & 100                  \\ \hline
+  5                  & 171                  & 987                  & 962                 & 111                  \\ \hline
+  6                  & 206                  & 948                  & 561                 & 95                   \\ \hline
+  7                  & 141                  & 2234                 & 981                 & 100                  \\ \hline
+  8                  & 143                  & 1127                 & 560                 & 143                  \\ \hline
+  9                  & 127                  & 925                  & 602                 & 102                  \\ \hline
+  10                 & 138                  & 987                  & 826                 & 98                   \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 1000 registros con índices}
+\end{table}
+\pagebreak
+\textbf{*: } Los índices de dichas consultas fueron generados automáticamente debido a que se trataron de consultas a llaves primarias.
+
+\subsubsection*{10000 datos}
+\begin{table}[]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
+  1                  & 1274                 & 10640                & 7372                & 1218                 \\ \hline
+  2                  & 1069                 & 24951                & 7202                & 809                  \\ \hline
+  3                  & 996                  & 9696                 & 6493                & 943                  \\ \hline
+  4                  & 1504                 & 9860                 & 6187                & 831                  \\ \hline
+  5                  & 1014                 & 9393                 & 6243                & 775                  \\ \hline
+  6                  & 990                  & 9057                 & 6326                & 789                  \\ \hline
+  7                  & 1036                 & 10117                & 6268                & 788                  \\ \hline
+  8                  & 972                  & 8867                 & 6612                & 774                  \\ \hline
+  9                  & 1039                 & 9491                 & 6843                & 802                  \\ \hline
+  10                 & 1041                 & 25504                & 6666                & 778                  \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 10000 registros con indices}
+\end{table}
+
+\subsubsection*{100000 datos}
+\begin{table}[]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
+  1                  & 10510                & 251633               & 145873              & 8237                 \\ \hline
+  2                  & 9200                 & 181925               & 130947              & 8022                 \\ \hline
+  3                  & 8955                 & 201314               & 130322              & 8275                 \\ \hline
+  4                  & 8882                 & 180551               & 115559              & 7742                 \\ \hline
+  5                  & 8781                 & 201032               & 106950              & 8068                 \\ \hline
+  6                  & 8754                 & 224053               & 113188              & 7540                 \\ \hline
+  7                  & 9510                 & 256456               & 115607              & 10460                \\ \hline
+  8                  & 8595                 & 208429               & 104065              & 7273                 \\ \hline
+  9                  & 25229                & 201450               & 107654              & 25205                \\ \hline
+  10                 & 25274                & 194192               & 82748               & 8097                 \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 100000 registros con indices}
+\end{table}
+
+\subsubsection*{1000000 datos}
+\begin{table}[]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
+  1                  & 57879                & 9062130              & 985364              & 59813                \\ \hline
+  2                  & 60410                & 1814157              & 957204              & 54529                \\ \hline
+  3                  & 56977                & 1850655              & 945955              & 54549                \\ \hline
+  4                  & 86084                & 1512095              & 945955              & 73334                \\ \hline
+  5                  & 79874                & 1580926              & 942538              & 55499                \\ \hline
+  6                  & 56939                & 1827148              & 1026727             & 53587                \\ \hline
+  7                  & 82606                & 1550428              & 963636              & 53682                \\ \hline
+  8                  & 57698                & 1482377              & 960600              & 56347                \\ \hline
+  9                  & 57590                & 1613899              & 1008798             & 54548                \\ \hline
+  10                 & 56873                & 1417192              & 966607              & 59824                \\ \hline
+  \end{tabular}
+  \caption{Mediciones de tiempo para 1000000 registros con indices}
+  \label{tab:my-table}
+\end{table}
+\fi
+
+\section{Resultados}
+\subsection{Consulta 1}
+\iffalse
+\begin{figure}[h!]
+  \begin{center}
+    \begin{tikzpicture}
+      \begin{axis}[
+          grid=major, 
+          grid style={dashed,gray!30},
+          xlabel=N,
+          ylabel=TIME (S),
+          legend style={at={(0.5,-0.4)},anchor=north},
+          x tick label style={rotate=90,anchor=east}
+        ]
+        \addplot coordinates{
+            (1000,132.8)
+            (10000,1093.5)
+            (100000, 12269)
+            (1000000,65293)
+        }; 
+        \legend{con índice por default al ser llave primaria}
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Tiempos de ejecución - Consulta 1.}
+  \end{center}
+\end{figure}
+\fi
+
+\subsection{ Consulta 2}
+
+\subsection{ Consulta 3}
+
+\subsection{ Consulta 4}
+
+
+\section{Análisis y Discusión}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Conclusiones}
+\fi
+
+\appendix
+\appendixpage
+\chapter{Entidad-Relación}
+\label{A::MER}
+\begin{sidewaysfigure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{Entidad-Relacion-RT.pdf}
+\end{sidewaysfigure}
+
+\chapter{ Relacional}
+\label{A::MR}
+\begin{sidewaysfigure}[ht]
+    \centering
+    \includegraphics[width=\textwidth]{Modelo-Relacional-RT.pdf}
+\end{sidewaysfigure}
+  
+\end{document}

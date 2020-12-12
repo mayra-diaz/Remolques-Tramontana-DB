@@ -1,5 +1,7 @@
 CREATE SCHEMA RT;
 
+SET SCHEMA 'RT';
+
 CREATE TABLE RT.Cliente(
   RUC bigint PRIMARY KEY,
   ubicacion varchar(100),
@@ -12,7 +14,8 @@ CREATE TABLE RT.ContactoCliente (
   celular int,
   correo varchar(60),
   ClienteRUC bigint NOT NULL,
-  FOREIGN KEY(ClienteRUC) REFERENCES RT.Cliente(RUC)
+  FOREIGN KEY(ClienteRUC) REFERENCES RT.Cliente(RUC),
+  CONSTRAINT unique_ccl UNIQUE(celular)
 );
 
 CREATE TABLE RT.Proveedor(
@@ -29,7 +32,8 @@ CREATE TABLE RT.ContactoProveedor(
   celular int,
   correo varchar(60),
   ProveedorRUC bigint NOT NULL,
-  FOREIGN KEY(ProveedorRUC) REFERENCES RT.Proveedor(RUC)
+  FOREIGN KEY(ProveedorRUC) REFERENCES RT.Proveedor(RUC),
+  CONSTRAINT unique_pcl UNIQUE(celular)
 );
 
 CREATE TABLE RT.Empleado(
@@ -38,11 +42,13 @@ CREATE TABLE RT.Empleado(
   celular int NOT NULL,
   correo varchar(60) NOT NULL,
   direccion varchar(150) NOT NULL,
-  nacimiento datetime NOT NULL,
+  nacimiento date NOT NULL,
   nCuenta bigint NOT NULL,
   area varchar(25) NOT NULL,
   cargo varchar(25) NOT NULL,
-  sueldo precision NOT NULL
+  sueldo double precision NOT NULL,
+  CONSTRAINT unique_ecl UNIQUE(celular),
+  CONSTRAINT unique_nCta UNIQUE(nCuenta)
 );
 
 CREATE TABLE RT.Maquina(
@@ -51,8 +57,8 @@ CREATE TABLE RT.Maquina(
 );
 
 CREATE TABLE RT.Trabajo(
-  fecha datetime,
-  numero tinyint,
+  fecha timestamp,
+  numero smallint,
   descripcion varchar(150) NOT NULL,
   horas real NOT NULL,
   Mcodigo int NOT NULL,
@@ -62,12 +68,11 @@ CREATE TABLE RT.Trabajo(
 
 CREATE TABLE RT.Dirige(
   dni int,
-  Tfecha datetime,
-  Tnumero tinyint,
-  PRIMARY KEY(dni, Tfecha, Tnumero)
+  Tfecha timestamp,
+  Tnumero smallint,
+  PRIMARY KEY(dni, Tfecha, Tnumero),
   FOREIGN KEY(dni) REFERENCES RT.Empleado(dni),
-  FOREIGN KEY(Tfecha) REFERENCES RT.Trabajo(fecha),
-  FOREIGN KEY(Tnumero) REFERENCES RT.Trabajo(numero)
+  FOREIGN KEY(Tfecha, Tnumero) REFERENCES RT.Trabajo(fecha, numero)
 );
 
 CREATE TABLE RT.Bien(
@@ -81,8 +86,8 @@ CREATE TABLE RT.Bien(
 CREATE TABLE RT.Compra(
   nFactura int,
   Bdescripcion varchar(100),
-  fecha datetime NOT NULL,
-  precioUnitario precision NOT NULL,
+  fecha date NOT NULL,
+  precioUnitario double precision NOT NULL,
   cantidad smallint NOT NULL,
   ProveedorRUC bigint NOT NULL,
   PRIMARY KEY(nFactura, Bdescripcion),
@@ -92,13 +97,12 @@ CREATE TABLE RT.Compra(
 
 CREATE TABLE RT.Requiere(
   Bdescripcion varchar(100),
-  Tfecha datetime,
-  Tnumero tinyint,
+  Tfecha timestamp,
+  Tnumero smallint,
   cantidad smallint NOT NULL,
-  PRIMARY KEY(Bdescripcion, Tfecha, Tnumero)
+  PRIMARY KEY(Bdescripcion, Tfecha, Tnumero),
   FOREIGN KEY(Bdescripcion) REFERENCES RT.Bien(descripcion),
-  FOREIGN KEY(Tfecha) REFERENCES RT.Trabajo(fecha),
-  FOREIGN KEY(Tnumero) REFERENCES RT.Trabajo(numero)
+  FOREIGN KEY(Tfecha, Tnumero) REFERENCES RT.Trabajo(fecha, numero)
 );
 
 CREATE TABLE RT.Carroceria(
@@ -107,20 +111,20 @@ CREATE TABLE RT.Carroceria(
   vin varchar(20),
   categoria varchar(2) NOT NULL,
   carroceria varchar(25) NOT NULL,
-  largo precision NOT NULL,
-  ancho precision NOT NULL,
-  alto precision NOT NULL,
-  nEjes smallint NOT NULL,,
+  largo double precision NOT NULL,
+  ancho double precision NOT NULL,
+  alto double precision NOT NULL,
+  nEjes smallint NOT NULL,
   nLlantas smallint NOT NULL,
   color varchar(15),
-  cargaUtil precision,
-  pesoNeto precision,
+  cargaUtil double precision,
+  pesoNeto double precision,
   ClienteRUC bigint NOT NULL,
   nFactura int,
-  precio precision,
+  precio double precision,
   medioPago varchar(20),
   alContado boolean,
-  fecha datetime NOT NULL,
+  fecha date NOT NULL,
   CONSTRAINT unique_placa UNIQUE(placa),
   CONSTRAINT unique_vin UNIQUE(VIN),
   FOREIGN KEY(ClienteRUC) REFERENCES RT.Cliente(RUC)
@@ -132,6 +136,5 @@ CREATE TABLE RT.Asociado(
   CompraBienDescripcion varchar(100),
   PRIMARY KEY(CarroceriaId, CompraNFactura, CompraBienDescripcion),
   FOREIGN KEY(CarroceriaId) REFERENCES RT.Carroceria(id),
-  FOREIGN KEY(CompraNFactura) REFERENCES RT.Compra(nFactura),
-  FOREIGN KEY(CompraBienDescripcion) REFERENCES RT.Compra(Bdescripcion)
+  FOREIGN KEY(CompraNFactura, CompraBienDescripcion) REFERENCES RT.Compra(nFactura, Bdescripcion)
 );

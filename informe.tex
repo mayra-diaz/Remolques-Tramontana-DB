@@ -184,9 +184,8 @@ El área de Gerencia debe tener acceso a la manipulación y visualización total
 Las consultas más frecuentes solicitadas por la empresa son:
 \begin{itemize}
     \item Detalle del trabajo diario de los trabajadores del área de fabricación. Esto incluye materiales y máquinas utilizadas.
-    \item El trabajo total de los empleados del área de fabricación por fechas.
-    \item Total de compras por carrocería.
-    \item Stock de la empresa.
+    \item Máquinas más utilizadas (horas) por trabajador por año.
+    \item Productos medidos en kilos más comprados al año.
 \end{itemize}
 
 Las actualizaciones más frecuentes serán:
@@ -206,19 +205,19 @@ Las actualizaciones más frecuentes serán:
   \multicolumn{1}{|c|}{ContactoProveedor} & 4+80+4+60+8                               & 156                        & 200               & \textbf{31200}          \\ \hline
   \multicolumn{1}{|c|}{Cliente}           & 8+100+80                                  & 188                        & 30                & \textbf{5640}           \\ \hline
   \multicolumn{1}{|c|}{Proveedor}         & 8+100+80+150+1                            & 339                        & 200               & \textbf{67800}          \\ \hline
-  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+8+8+25+25+8                 & 372                        & 15                & \textbf{5580}           \\ \hline
+  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+4+8+25+25+8                 & 368                        & 15                & \textbf{5520}           \\ \hline
   \multicolumn{1}{|c|}{Dirige}            & 4+8+1                                     & 13                         & 0                 & \textbf{0}              \\ \hline
-  \multicolumn{1}{|c|}{Compra}            & 4+100+8+8+2+8                             & 130                        & 0                 & \textbf{0}              \\ \hline
+  \multicolumn{1}{|c|}{Compra}            & 4+100+8+8+2+4                             & 126                        & 0                 & \textbf{0}              \\ \hline
   \multicolumn{1}{|c|}{Trabajo}           & 8+1+150+4+4                               & 167                        & 0                 & \textbf{0}              \\ \hline
   \multicolumn{1}{|c|}{Maquina}           & 4+150                                     & 154                        & 15                & \textbf{2310}           \\ \hline
   \multicolumn{1}{|c|}{Requiere}          & 100+8+1+2                                 & 111                        & 0                 & \textbf{0}              \\ \hline
-  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+8 & 167                        & 40                & \textbf{6680}           \\ \hline
+  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+4 & 163                        & 40                & \textbf{6520}           \\ \hline
   \multicolumn{1}{|c|}{Asociado}          & 4+4+100                                   & 108                        & 0                 & \textbf{0}              \\ \hline
   \multicolumn{1}{|c|}{Bien}              & 100+1+15+2+20                             & 138                        & 250               & \textbf{34500}          \\ \hline
-  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 158390                  \\ \cline{3-5} 
+  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 158170                  \\ \cline{3-5} 
   \end{tabular}
   \end{table}
-Se estima un tamaño inicial de 158.390 KB (kilobytes).
+Se estima un tamaño inicial de 158.170 KB (kilobytes).
 
 
 \begin{table}[]
@@ -230,19 +229,19 @@ Se estima un tamaño inicial de 158.390 KB (kilobytes).
   \multicolumn{1}{|c|}{ContactoProveedor} & 4+80+4+60+8                               & 156                        & 2                 & \textbf{312}            \\ \hline
   \multicolumn{1}{|c|}{Cliente}           & 8+100+80                                  & 188                        & 3                 & \textbf{564}            \\ \hline
   \multicolumn{1}{|c|}{Proveedor}         & 8+100+80+150+1                            & 339                        & 2                 & \textbf{678}            \\ \hline
-  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+8+8+25+25+8                 & 372                        & 1                 & \textbf{372}            \\ \hline
+  \multicolumn{1}{|c|}{Empleado}          & 4+80+4+60+150+4+8+25+25+8                 & 368                        & 1                 & \textbf{368}            \\ \hline
   \multicolumn{1}{|c|}{Dirige}            & 4+8+1                                     & 13                         & 2550              & \textbf{33150}          \\ \hline
-  \multicolumn{1}{|c|}{Compra}            & 4+100+8+8+2+8                             & 130                        & 240               & \textbf{31200}          \\ \hline
+  \multicolumn{1}{|c|}{Compra}            & 4+100+4+8+2+8                             & 126                        & 240               & \textbf{30240}          \\ \hline
   \multicolumn{1}{|c|}{Trabajo}           & 8+1+150+4+4                               & 167                        & 1700              & \textbf{283900}         \\ \hline
   \multicolumn{1}{|c|}{Maquina}           & 4+150                                     & 154                        & 1                 & \textbf{154}            \\ \hline
   \multicolumn{1}{|c|}{Requiere}          & 100+8+1+2                                 & 111                        & 3400              & \textbf{377400}         \\ \hline
-  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+8 & 167                        & 12                & \textbf{2004}           \\ \hline
+  \multicolumn{1}{|c|}{Carroceria}        & 4+20+8+2+25+8+8+8+2+2+15+8+8+8+4+20+1+8+4 & 163                        & 12                & \textbf{1956}           \\ \hline
   \multicolumn{1}{|c|}{Asociado}          & 4+4+100                                   & 108                        & 30                & \textbf{3240}           \\ \hline
   \multicolumn{1}{|c|}{Bien}              & 100+1+15+2+20                             & 138                        & 6                 & \textbf{828}            \\ \hline
-  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 734270                  \\ \cline{3-5} 
+  \multicolumn{1}{l}{}                    & \multicolumn{1}{l|}{}                     & \multicolumn{2}{c|}{\textbf{Total}}            & 733258                  \\ \cline{3-5} 
   \end{tabular}
   \end{table}
-Se estima un crecimiento semestral de 734.270 KB (kilobytes).
+Se estima un crecimiento semestral de 733.258 KB (kilobytes).
 
 
 \section{Objetivos del proyecto}
@@ -387,7 +386,7 @@ El diagrama fue realizado con el software draw.io. Para apreciarlo mejor, consul
     \textcolor{Blue}{\underline{dni:int},  \textcolor{ForestGreen}{Proveedor}.RUC,  nombre:string, celular:int, correo:string})
     
     \item \textbf{\textcolor{ForestGreen}{Empleado}}(
-    \textcolor{Blue}{\underline{dni:int}, nombre:string,  celular:int, correo:string,  direccion:string,  nacimiento:datetime, nCuenta:int, area:string, cargo:string, sueldo:float})
+    \textcolor{Blue}{\underline{dni:int}, nombre:string,  celular:int, correo:string,  direccion:string,  nacimiento:date, nCuenta:int, area:string, cargo:string, sueldo:float})
     
     \item \textbf{\textcolor{ForestGreen}{Cliente}}(
     \textcolor{Blue}{\underline{RUC:int}, ubicacion:string, razonSocial:string})
@@ -396,13 +395,13 @@ El diagrama fue realizado con el software draw.io. Para apreciarlo mejor, consul
     \textcolor{Blue}{\underline{RUC:int}, ubicacion:string, razonSocial:string, descripcion:string, esDeProducto:boolean})
     
     \item \textbf{\textcolor{ForestGreen}{Compra}}(
-    \textcolor{Blue}{\underline{nFactura:int}, \underline{\textcolor{ForestGreen}{Bien}.descripcion:string}, fecha:datetime, precioUnitario:float, cantidad:int, \textcolor{ForestGreen}{Proveedor}.RUC})
+    \textcolor{Blue}{\underline{nFactura:int}, \underline{\textcolor{ForestGreen}{Bien}.descripcion:string}, fecha:date, precioUnitario:float, cantidad:int, \textcolor{ForestGreen}{Proveedor}.RUC})
     
     \item \textbf{\textcolor{ForestGreen}{Bien}}(
     \textcolor{Blue}{\underline{descripcion:string}, esProducto:bool, clasificacion:string, stock:int, unidades:string})
     
     \item \textbf{\textcolor{ForestGreen}{Carroceria}}(
-    \textcolor{Blue}{\underline{id:int}, placa:string vin:string, categoria:string, carroceria:string, largo:float, ancho:float, alto:float, nEjes:int, nLlantas:int, color:string, cargaUtil:float, pesoNeto:float, \textcolor{ForestGreen}{Cliente}.RUC:int, nFactura:int, precio:float, medioPago:string, alContado:bool, deuda:float, fecha:datetime})
+    \textcolor{Blue}{\underline{id:int}, placa:string vin:string, categoria:string, carroceria:string, largo:float, ancho:float, alto:float, nEjes:int, nLlantas:int, color:string, cargaUtil:float, pesoNeto:float, \textcolor{ForestGreen}{Cliente}.RUC:int, nFactura:int, precio:float, medioPago:string, alContado:bool, deuda:float, fecha:date})
     
     \item \textbf{\textcolor{ForestGreen}{Trabajo}}(
     \textcolor{Blue}{\underline{fecha:datetime}, \underline{numero:int}, descripcion:string, horas:float, \textcolor{ForestGreen}{Maquina}.codigo.int})
@@ -532,7 +531,7 @@ No contamos con relaciones ternarias ni de agragación.
   celular        & int                   &                                  &                                  & Celular del empleado                   \\ \hline
   correo         & varchar               &                                  &                                  & Correo electrónico del empleado        \\ \hline
   direccion      & varchar               &                                  &                                  & Dirección del empleado                 \\ \hline
-  nacimiento     & datetime              &                                  &                                  & Fecha de nacimiento del empleado       \\ \hline
+  nacimiento     & date              &                                  &                                  & Fecha de nacimiento del empleado       \\ \hline
   nCuenta        & bigint                &                                  &                                  & Número de cuenta bancaria del empleado \\ \hline
   area           & varchar               &                                  &                                  & Área en donde trabaja el empleado      \\ \hline
   cargo          & varchar               &                                  &                                  & Cargo que ocupa el empleado            \\ \hline
@@ -585,7 +584,7 @@ No contamos con relaciones ternarias ni de agragación.
   \textbf{Campo}   & \textbf{Tipo de dato} & \textbf{PK}           & \textbf{FK}           & \textbf{Descripción}                              \\ \hline
   nFactura         & int                   & X                     &                       & Número de factura asociada a la compra            \\ \hline
   Bien.descripcion & varchar               & X                     & X                     & Descripción del bien asociado a la compra         \\ \hline
-  fecha            & datetime              &                       & \multicolumn{1}{l|}{} & Fecha de la compra                                \\ \hline
+  fecha            & date              &                       & \multicolumn{1}{l|}{} & Fecha de la compra                                \\ \hline
   precioUnitario   & double precision      & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{} & Precio unitario de la compra                      \\ \hline
   cantidad         & smallint              &                       & \multicolumn{1}{l|}{} & Cantidad de la compra                             \\ \hline
   Proveedor.RUC    & bigint                & \multicolumn{1}{l|}{} & X                     & RUC de la empresa proveedora asociada a la compra \\ \hline
@@ -629,7 +628,7 @@ No contamos con relaciones ternarias ni de agragación.
   precio         & double precision      &                                  &                                  & Precio de la carrocería                        \\ \hline
   medioPago      & varchar               &                                  &                                  & Medio de pago utilizado                        \\ \hline
   alContado      & bool                  &                                  &                                  & Indica si el pago fue al contado o no          \\ \hline
-  fecha          & datetime              &                                  &                                  & Fecha de inicio de producción de la carrocería \\ \hline
+  fecha          & date              &                                  &                                  & Fecha de inicio de producción de la carrocería \\ \hline
   \end{tabular}
 \end{table}
 

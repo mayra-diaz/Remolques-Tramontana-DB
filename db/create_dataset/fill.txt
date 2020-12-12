@@ -1,0 +1,36 @@
+COPY RT1000.empleado FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/empleado.tsv' DELIMITER E'\t';
+COPY RT1000.maquina FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/maquina.tsv' DELIMITER E'\t';
+COPY RT1000.proveedor FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/proveedor.tsv' DELIMITER E'\t';
+COPY RT1000.bien FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/bien.tsv' DELIMITER E'\t';
+COPY RT1000.trabajo FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/trabajo.tsv' DELIMITER E'\t';
+COPY RT1000.dirige FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/dirige.tsv' DELIMITER E'\t';
+COPY RT1000.requiere FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/requiere.tsv' DELIMITER E'\t';
+COPY RT1000.compra FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000/compra.tsv' DELIMITER E'\t';
+
+COPY RT10000.empleado FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/empleado.tsv' DELIMITER E'\t';
+COPY RT10000.maquina FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/maquina.tsv' DELIMITER E'\t';
+COPY RT10000.proveedor FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/proveedor.tsv' DELIMITER E'\t';
+COPY RT10000.bien FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/bien.tsv' DELIMITER E'\t';
+COPY RT10000.trabajo FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/trabajo.tsv' DELIMITER E'\t';
+COPY RT10000.dirige FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/dirige.tsv' DELIMITER E'\t';
+COPY RT10000.requiere FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/requiere.tsv' DELIMITER E'\t';
+COPY RT10000.compra FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/10000/compra.tsv' DELIMITER E'\t';
+
+COPY RT100000.empleado FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/empleado.tsv' DELIMITER E'\t';
+COPY RT100000.maquina FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/maquina.tsv' DELIMITER E'\t';
+COPY RT100000.proveedor FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/proveedor.tsv' DELIMITER E'\t';
+COPY RT100000.bien FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/bien.tsv' DELIMITER E'\t';
+COPY RT100000.trabajo FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/trabajo.tsv' DELIMITER E'\t';
+COPY RT100000.dirige FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/dirige.tsv' DELIMITER E'\t';
+COPY RT100000.requiere FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/requiere.tsv' DELIMITER E'\t';
+COPY RT100000.compra FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/100000/compra.tsv' DELIMITER E'\t';
+
+COPY RT1000000.empleado FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/empleado.tsv' DELIMITER E'\t';
+COPY RT1000000.maquina FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/maquina.tsv' DELIMITER E'\t';
+COPY RT1000000.proveedor FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/proveedor.tsv' DELIMITER E'\t';
+COPY RT1000000.bien FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/bien.tsv' DELIMITER E'\t';
+COPY RT1000000.trabajo FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/trabajo.tsv' DELIMITER E'\t';
+COPY RT1000000.dirige FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/dirige.tsv' DELIMITER E'\t';
+COPY RT1000000.requiere FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/requiere.tsv' DELIMITER E'\t';
+COPY RT1000000.compra FROM '/home/mayra/UTEC/2020-2/BD1/Remolques-Tramontana-DB/db/1000000/compra.tsv' DELIMITER E'\t';
+

@@ -129,7 +129,7 @@ with open(folder+'empleado.tsv', 'wt') as out_file:
       correo = gnames[randint(0, gnamesl)] + '.' + bnames[randint(0, bnamesl)] + str(i) + '@gmail.com'
       direccion = pref[randint(0, prefl)] + ' ' + bnames[randint(0, bnamesl)] + ' ' + rwords[randint(0, rwordsl)] + ' ' + gnames[randint(0, gnamesl)]
       nacimiento = cumples[randint(0, cumplesl)]
-      area = areas[randint(0, 3)]
+      area = 'Fabricación'
       cargo = cargos[area]
       sueldo = randint(930, 10000)
       tsv_writer.writerow([str(dni), nombre, str(cel), correo, direccion, nacimiento, nCuenta, area, cargo, str(sueldo)])

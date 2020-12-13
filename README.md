@@ -1,6 +1,6 @@
 # Remolques-Tramontana-DB
 ## Integrantes
-- Mayra Díaz
-- Joaquín Ramírez
+- [Mayra Díaz](https://github.com/mayra-diaz)
+- [Joaquín Ramírez](https://github.com/lordjuacs)
 - Paolo morey
 

@@ -1,3 +1,2 @@
--- Todos los bienes que sean de la categoría 'Construcción', que cuenten con stock (mayor a 0) y hayan sido compradas en el 2019 por un precio unitario mayor a 10 soles.
-   
-   
+--Todos los bienes CON EL NUMERO DE FACTURA (PUEDEN REPETIRSE) que sean de la categoría 'Construcción', que cuenten con stock (mayor a 0) y hayan sido compradas en el 2019 por un precio unitario mayor a 50 soles.
+ 

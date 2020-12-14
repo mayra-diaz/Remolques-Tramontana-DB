@@ -1,4 +1,4 @@
--- Máquinas que hayan utilizado bienes medidos en kilogramos por una cantidad total mayor a 12.
+-- Máquinas que hayan utilizado bienes medidos en X por una cantidad total mayor a Y.
 
 SET SCHEMA 'RT';
 

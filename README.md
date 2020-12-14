@@ -6,3 +6,5 @@ Proyecto Final del Curso de Base de Datos I - Universidad de Ingeniería y Tecno
 - [Joaquín Ramírez](https://github.com/lordjuacs)
 - [Paolo Morey](https://github.com/PaoloMorey)
 
+## Otros recursos
+[Carpeta en Drive](https://drive.google.com/drive/folders/10AVhqKccH2p4X61iyxM0ngsfDB-fiuQi?usp=sharing)

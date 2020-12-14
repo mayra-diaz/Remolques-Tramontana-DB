@@ -4,6 +4,7 @@
 \usepackage{fancyhdr}   
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{hyperref}
 \usepackage[shortlabels]{enumitem}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -185,9 +186,11 @@ El área de Gerencia debe tener acceso a la manipulación y visualización total
 \subsection{Tipos de consulta, actualizaciones}
 Las consultas más frecuentes solicitadas por la empresa son:
 \begin{itemize}
-    \item Cuántas horas trabajaron por máquina los 10 empleados de mayor sueldo del área de fabricación.
-    \item Todos los bienes que sean de la categoría 'Construcción', que cuenten con stock (mayor a 0) y hayan sido compradas en X año por un precio unitario mayor a 10 soles.
-    \item Máquinas que hayan utilizado bienes medidos en kilogramos por una cantidad total mayor a 12 durante el año X.
+\subsection{Descripción del tipo de consultas seleccionadas}
+ \item ¿Cuántas horas en total trabajaron los empleados con los dos sueldos más altos del área de fabricación?
+\item ¿Cuáles son los bienes de determinada categoría, que cuentan con un stock mayor a 0 y han sido comprados en el año \textit{x} por un precio unitario mayor a \textit{y} soles?
+\item ¿Qué máquinas han utilizado bienes medidos en unidades \textit{x} por una cantidad total mayor a \textit{y} en una determinada fecha?
+ 
 \end{itemize}
 
 Las actualizaciones más frecuentes serán:
@@ -665,15 +668,29 @@ No contamos con relaciones ternarias ni de agragación.
 \chapter{Implementación de la base de datos}
 
 \section{Creación de Tablas en PostgreSQL}
-%%\lstinputlisting[style=NiceStyle, language=sql]{baseDeDatos/creacion.sql}
+\lstinputlisting[style=NiceStyle, language=sql]{baseDeDatos/create_db.sql}
 \section{Carga de datos}
-\section{Simulación de Datos Faltantes}
+Los datos fueron cargados mediante archivos tsv que fueron generados por nosotros mediante scripts hechos en python. 
 
+\section{Simulación de Datos Faltantes}
+Los datos fueron simulados en python, los archivos pueden ser vistos en el \href{https://github.com/mayra-diaz/Remolques-Tramontana-DB}{repositorio en GitHub}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Optimización y Experimentación}
+Se realizarán tres consultas críticas para probar los tiempos de ejecución y la respuesta de la base de datos implementada. Además, estas consultas se ejecutarán en diferentes conjuntos de datos de distintos tamaños, los cuales también serán analizados con diferentes indexaciones (sin índices y con índices) con el propósito de comparar los resultados y lograr obtener resultados sólidos.
+
+
 \section{Consultas SQL para el experimento}
 \subsection{Descripción del tipo de consultas seleccionadas}
+\textbf{Consulta 1}: ¿Cuántas horas en total trabajaron los empleados con los X sueldos más altos del área de fabricación?
+\textbf{Justificación}: La empresa desea saber las horas remuneradas son equivalentes a las trabajadas.
+
+\textbf{Consulta 2}: ¿Cuáles son los bienes de determinada categoría, que cuentan con un stock mayor a 0 y han sido comprados en el último año por un precio unitario mayor a \textit{y} soles?
+\textbf{Justificación}: La empresa desea saber cuáles son los bienes a partir de cierto precio que fueron comprados y no se llegaron a utilizar en su totalidad.
+
+\textbf{Consulta 3}: ¿Qué máquinas han utilizado bienes medidos en unidades \textit{x} por una cantidad total mayor a \textit{y} en una determinada fecha?
+
+
 \subsection{Implementación de consultas en SQL}
 \subsubsection*{Consulta 1}
 \lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta1/c1.sql}
@@ -688,9 +705,10 @@ No contamos con relaciones ternarias ni de agragación.
 
 \section{Metodología del experimento}
 \begin{enumerate}
-    \item Crear una base de datos con cuatro esquemas a partir del mismo modelo relacional que se puede observar en el \textbf{Anexo B}, que tengan 1K, 10K, 100K y 1M de tuplas, respectivamente. Utilizar el \textbf{"MAYRA PON COMO CREASTE LA WEA ACA"} para generar los datos.
-    \item Se crean índices para cada consulta para poder hacer un análisis posterior de las consultas con y sin índices.
-    \item Se procede a desactivar la utilización automática de índices por parte de PosgreSQL. Asimismo, se desactivan los índices creados. En la Consulta 1 se dejan los índices default activados para hacer una comparación posterior del tiempo de ejecución. Para lograrlo se ejecutan los siguientes comandos:
+    \item Crear una base de datos con cuatro esquemas a partir del mismo modelo relacional que se puede observar en el  \hyperlink{A:MR}{ \textbf{Anexo B}}, que tengan 1K, 10K, 100K y 1M de tuplas, respectivamente. 
+    \item Utilizar los archivos \textit{.tsv} generados por el script en \texttt{Python} para la generación de datos y con ellos poblar los esquemas.
+    \item Crear índices para cada consulta para poder hacer un análisis posterior de las consultas con y sin índices.
+    \item Desactivar la utilización automática de índices por parte de PosgreSQL. Asimismo, se desactivan los índices creados. En la Consulta 1 se dejan los índices default activados para hacer una comparación posterior del tiempo de ejecución. Para lograrlo se ejecutan los siguientes comandos:
     \lstinputlisting[style=NiceStyle, language=sql]{consultas/indexes.sql}
     \item Se procede a ejecutar las consultas sin índices con la sentencia \texttt{EXPLAIN ANALYZE} para obtener información acerca de cada consulta y la manera en la que PostgreSQL lo ejecutó. La información obtenida es guardada.
     \item Se limpia la caché entre cada consulta realizada.
@@ -741,7 +759,7 @@ Se muestran los diagramas internos de ejecución generados por PgAdmin. Posterio
 \end{enumerate}
 
 \subsection{Planes de índices para Consulta 2}
-Se muestran los diagramas internos de ejecuci ́on generados por PgAdmin.Posteriormente se muestran los resultados obtenidos al ejecutar la consulta con EXPLAIN ANALYZE.
+Se muestran los diagramas internos de ejecución generados por PgAdmin.Posteriormente se muestran los resultados obtenidos al ejecutar la consulta con EXPLAIN ANALYZE.
 \subsubsection{Ejecución sin índices}
 \begin{figure}[!h]
   \centering
@@ -823,7 +841,6 @@ PgAdmin                                         & Versión 4                    
 \caption{Tabla de plataforma de pruebas para consulta 1}
 \end{table}
 
-
 \begin{table}[]
 \footnotesize
 \begin{tabular}{|c|c|}
@@ -840,14 +857,37 @@ PostgreSQL                                      & 12.4                        \\
 PgAdmin                                         & Versión 4                   \\ \hline
 \end{tabular}
 \caption{Tabla de plataforma de pruebas para consulta 2}
-\label{tab:my-table}
 \end{table}
+
+\begin{table}[]
+\footnotesize
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Item}                                   & \textbf{Detalle}            \\ \hline
+Sistema Operativo                               & Ubuntu 20.01.1                  \\ \hline
+RAM                                             & 8 Gb                       \\ \hline
+CPU                                             & Core™ i7-8550U              \\ \hline
+SSD Protocolo de Transferencia                  & SATA                        \\ \hline
+Modelo de disco sólido                          & Micron_1100_MTFD \\ \hline
+SSD Capacidad                                   & 256 GB                        \\ \hline
+SSD Tasa de Transferencia (Lectura / Escritura) & 500 Mbps / 530 Mbps         \\ \hline
+PostgreSQL                                      & 12.4                        \\ \hline
+PgAdmin                                         & Versión 4                   \\ \hline
+\end{tabular}
+\caption{Tabla de plataforma de pruebas para consulta 3}
+\end{table}
+
+
+
 \newpage
 \section{Medición de tiempos}
 Se realizaron las consultas por separado, repitiendo la ejecución un total de quince veces por cada esquema (1K, 10K, 100K y 1M).
-Los resultados obtenidos fueron resumidos y analizados en tablas y gráficos.
-\subsection{Sin índices}
+Los resultados obtenidos fueron resumidos y analizados en tablas y gráficos.\\
 
+Para tener tiempos más exactos realizamos 15 veces cada consulta. Los resultados pueden ser vistos \href{https://docs.google.com/spreadsheets/d/1VTr49dQ2VYkrrlQ-rBszSXFpJIpz7h5ejWiqU3tfeNU/edit?usp=sharing}{\textbf{aquí}}.
+
+
+\subsection{Sin índices}
 Se ejecutaron las consultas sin hacer uso de índices, y se halló el promedio de cada una.
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|c|}
@@ -925,10 +965,7 @@ Para poder realizar un análisis más profundo de cada consulta respecto a los d
   \includegraphics[scale=0.7]{consultas/Consulta1/grafico1.png}
 \end{figure} 
 
-Para la primera consulta 1 se puede apreciar en la figura 3 que no existe
-una diferencia apreciable entre las consultas con ´ındices y sin ´ındices cuando
-el tama˜no del dataset es menor 10k, a partir de 10k en adelante ya se puede
-observar una diferencia que va aumentando en relaci´on al tama˜no del dataset.
+Para la consulta 1, en la que se compara el desempeño cuando se utiliza un índice creado y cuando se utilizan los índices default, se puede apreciear una clara diferencia. En general, con índice propio se comporta de una manera extremadamente eficaz, incluso con el dataset de 1M. Por otro lado, el desempeño con los índices default es bueno hasta los 10K, pero en adelante el tiempo de ejecución aumenta notablemente.
 
 \newpage
 \subsection{ Consulta 2}
@@ -938,8 +975,7 @@ observar una diferencia que va aumentando en relaci´on al tama˜no del dataset.
   \includegraphics[scale=0.7]{consultas/Consulta2/grafico2.png}
 \end{figure} 
 
-Para esta segunda consulta a diferencia de la consulta anterior solo se puede
-apreciar una ligera diferencia cuando el tama˜no del dataset es de 100k.
+Haciendo un análisis de comportamieto del tiempo de ejecución de la consulta 2 con índices y sin índices, podemos apreciar que las diferencias son cada vez mayores a medida que aumenta el tamaño de nuestro dataset. Viendo el comportamiento de los datos por iteración para el dataset de 100k, podemos ver que en este caso ocurre la mayor diferencia entre la consulta con índices y sin indíces. Cabe resaltar que se usaron 4 índices para esta consulta, dos B+ y dos Hash.
 
 \newpage
 \subsection{ Consulta 3}
@@ -949,27 +985,25 @@ apreciar una ligera diferencia cuando el tama˜no del dataset es de 100k.
   \includegraphics[scale=0.7]{consultas/Consulta3/grafico3.png}
 \end{figure} 
 
-Para esta consulta al igual que en las consultas anteriores no hay una diferencia apreciable cuando el tama˜no del dataset es menor a 10k y s´ı cuando pasa
-este tama˜no como se puede ver para cuando el tama˜no es de 100k y mucho m´as
-a´un en 1000k.
+Podemos ver que la versión optimizada con índices se empieza a distinguir notablemente de la otra con el crecimiento de la data. Cuando ejecutamos las consultas con pocos datos la diferencia no se percive mucho, sin embargo para que nuestras consultas sean buenas y escalables debemos optimizarla. En este caso vemos cómo el uso de los índices adecuados realmente hacen la diferencia.
 
 \newpage
 \section{Análisis y Discusión}
 
+Para poder analizar el desempeño general de las consultas, se generó una tabla que muestra el promedio de tiempo de acuerdo a la indexación, analizado en cada dataset.
 \begin{table}[h]
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \multicolumn{5}{|c|}{\textbf{PROMEDIO: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
                       & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}  \\
 \textbf{Sin Índice}   & 9.473         & 47.719         & 319.983         & 1828.566     \\
-\textbf{Con Índice}   & 1.31          & 13.836         & 99.258          & 625.764      \\
-\textbf{Consulta 3}   & 3.5797        & 39.842         & 285.893         & 1550.183     \\ \hline
+\textbf{Con Índice}   & 1.31          & 13.836         & 99.258          & 625.764      \\ \hline
 \end{tabular}
 \caption{Tabla de promedio de las tres consultas}
 \label{tab:my-table}
 \end{table}
 
-blablabla
+Observando los datos numéricos, se puede ver que al indexar una tabla se mejora bastante el tiempo de ejecución de una consulta. Sin embargo, sería óptimo analizar esta información de una manera más gráfica, por lo que se hace uso de gráficas de dispersión.
 
 \newpage
 \begin{figure}[!h]
@@ -977,7 +1011,9 @@ blablabla
   \includegraphics[scale=0.7]{consultas/graficoPromedioBase.png}
 \end{figure} 
 
-blablabla
+La gráfica anterior permite visualizar que para datasets de pocos datos, no existe una diferencia considerable en el tiempo de ejecución. No obstante, conforme aumenta el tamaño de las tablas, de 100K a más, el desempeño con índices es notablemente más óptimo. Esto comprueba los propósitos de la aplicación de índices, que las consultas frecuentes sean más rápidas.
+
+Es de mucho interés conocer el comportamiento con cantidades de datos más grandes, por lo que se plantea un modelo de tendencias polinómico de grado 2 para proyectar el tiempo de ejecución con distintas cantidades de datos.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \begin{figure}[!h]
@@ -985,7 +1021,8 @@ blablabla
   \includegraphics[scale=0.7]{consultas/graficoPromedioPolinomio.png}
 \end{figure} 
 
-blablabla
+La gráfica muestra claramente que las líneas de tendencia polinómica se ajustan con bastante precisión al crecimiento real de las curvas de datos. Debido a que las ecuaciones que describen el comportamiento de las curvas generada responden
+a polinomios de grado 2, esto indica que el crecimiento del tiempo de ejecución de las consultas aumenta conforme se tienen más datos en los datasets de manera. Las ecuaciones de tendencia son las siguientes:
 
 \begin{equation}
     SI = F(x) = 368x^2 - 530x + 59.6
@@ -993,16 +1030,29 @@ blablabla
 \begin{equation}
     CI = G(x) = 128x^2 - 190x + 19.7
 \end{equation}
-bla bla bla
+Desarrollando un poco más las ecuaciones de tendencia, se llegan a las derivadas de cada una:
 \begin{equation}
     SI' = F'(x) = 736x - 530
 \end{equation}
 \begin{equation}
     CI' = G'(x) = 256x - 190
 \end{equation}
-bla bla bla
+Estas nuevas ecuaciones representan la razón de cambio del tiempo de ejecución de una consulta respecto a la variación del tamaño del dataset. Si calculamos las razones de cambio en el límite del experimento (1M), la ecuación (5.3) indica que la razón de cambio para consultas sin índice es de $736\cdot10^6\frac{ms}{registro}$. Por otra parte, la ecuación (5.4) indica que la razón de cambio para consultas con índice es de $256\cdot10^6\frac{ms}{registro}$. De esta manera, se aprecia que las consultas (para el millón de registros) sin índice son 287.5\% más costosas que las que si tienen índices.
+
+
 
 \chapter{Conclusiones}
+\begin{itemize}
+    \item Al momento de realizar el modelo entidad relación es fundamental familiarizarse completamente con el cliente. Establecer las reglas semánticas y entender el flujo de datos permite diseñar mejor y óptimamente la base de datos a implementar. El modelo relacional nos ayuda a poder determinar la veracidad de nuestro modelo y mejorarlo en caso necesite.
+    
+    \item El presente proyecto hizo uso de PostgresSQL para la implementación de la base de datos y la experimentación de las consultas. Este es el gestor de base de datos sobre el que se realizaron todas las operaciones del proyecto.
+    
+    \item El análisis numérico de tendencias polinomialesnos permite afirmar con más fundamentos que en efecto las tres consultas indexadas son más eficientes que las no indexadas. De igual manera, es vital saber a qué se le está aplicando índices y si en verdad es necesario, pues toda mejora en complejidad de ejecución tiene un costo adicional en espacio de memoria.
+    
+    \item En base a la experimentación podemos demostrar que el uso de índices es fundamental en el uso de bases de datos. Sobretodo si queremos que esta sea escalable, pues reduce los tiempos y optimiza recursos.
+    
+    \item No podemos afirmar que tán óptima es nuestra consulta en base a una base de datos con pocos datos, pues no se distingue bien y tampoco asegura que sea escalable ni real en el mercado.
+\end{itemize}
 
 
 \appendix
@@ -1021,4 +1071,10 @@ bla bla bla
     \includegraphics[width=\textwidth]{Modelo-Relacional-RT.pdf}
 \end{sidewaysfigure}
   
+  \chapter{Enlaces}
+  \begin{itemize}
+      \item Repositorio: \url{https://github.com/mayra-diaz/Remolques-Tramontana-DB}
+      \item Carpeta: \url{https://bit.ly/3a5kh2U}
+  \end{itemize}
+  \pagebreak
 \end{document}

@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import Tk, Canvas, Label, Frame, Entry, Button, W, E, Listbox, END
 import psycopg2

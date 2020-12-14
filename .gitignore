@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex
-
+db/1000000/
+.idea/
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux

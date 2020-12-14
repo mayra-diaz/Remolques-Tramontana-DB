@@ -1,0 +1,1 @@
+CREATE INDEX b_sueldo ON Empleado (sueldo);

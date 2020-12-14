@@ -1,2 +1,13 @@
---Todos los bienes CON EL NUMERO DE FACTURA (PUEDEN REPETIRSE) que sean de la categoría 'Construcción', que cuenten con stock (mayor a 0) y hayan sido compradas en el 2019 por un precio unitario mayor a 50 soles.
- 
+SELECT SAMPLE.nfactura
+	,SAMPLE.bdescripcion
+FROM (
+	(
+		SELECT descripcion
+		FROM.bien
+		WHERE clasificacion = 'Construccion'
+			AND stock > 0
+		) SAMPLE1 INNER JOIN Ccompra SAMPLE2 ON SAMPLE1.descripcion = SAMPLE2.bdescripcion
+	) SAMPLE
+WHERE SAMPLE.preciounitario > 50
+	AND SAMPLE.fecha BETWEEN '2019-01-01'
+		AND '2019-12-31';

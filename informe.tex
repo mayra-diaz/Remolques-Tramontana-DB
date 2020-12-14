@@ -2,6 +2,8 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage{fancyhdr}   
+\usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage[shortlabels]{enumitem}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -122,7 +124,7 @@
   { Paolo André Morey Tutiven 201910236\par}
   { Joaquín Elías Ramírez Gutiérrez 201910277\par}
   \vfill
-  {\large Octubre 2020 \par}
+  {\large Diciembre 2020 \par}
 \end{titlepage}
 \thispagestyle{fancy}
 
@@ -660,13 +662,10 @@ No contamos con relaciones ternarias ni de agragación.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\iffalse
 \chapter{Implementación de la base de datos}
 
 \section{Creación de Tablas en PostgreSQL}
-\iffalse
-\lstinputlisting[style=NiceStyle, language=sql]{baseDeDatos/creacion.sql}
-\fi
+%%\lstinputlisting[style=NiceStyle, language=sql]{baseDeDatos/creacion.sql}
 \section{Carga de datos}
 \section{Simulación de Datos Faltantes}
 
@@ -676,281 +675,335 @@ No contamos con relaciones ternarias ni de agragación.
 \section{Consultas SQL para el experimento}
 \subsection{Descripción del tipo de consultas seleccionadas}
 \subsection{Implementación de consultas en SQL}
-\iffalse
 \subsubsection*{Consulta 1}
-\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta1/consulta1SQL.sql}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta1/c1.sql}
 
 \subsubsection*{Consulta 2}
-\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta2/consulta2SQL.sql}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta2/c2.sql}
 
 \subsubsection*{Consulta 3}
-\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/consulta3SQL.sql}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/c3.sql}
 
-\subsubsection*{Consulta 4}
-\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta4/consulta4SQL.sql}
-\fi
+
 
 \section{Metodología del experimento}
+\begin{enumerate}
+    \item Crear una base de datos con cuatro esquemas a partir del mismo modelo relacional que se puede observar en el \textbf{Anexo B}, que tengan 1K, 10K, 100K y 1M de tuplas, respectivamente. Utilizar el \textbf{"MAYRA PON COMO CREASTE LA WEA ACA"} para generar los datos.
+    \item Se crean índices para cada consulta para poder hacer un análisis posterior de las consultas con y sin índices.
+    \item Se procede a desactivar la utilización automática de índices por parte de PosgreSQL. Asimismo, se desactivan los índices creados. En la Consulta 1 se dejan los índices default activados para hacer una comparación posterior del tiempo de ejecución. Para lograrlo se ejecutan los siguientes comandos:
+    \lstinputlisting[style=NiceStyle, language=sql]{consultas/indexes.sql}
+    \item Se procede a ejecutar las consultas sin índices con la sentencia \texttt{EXPLAIN ANALYZE} para obtener información acerca de cada consulta y la manera en la que PostgreSQL lo ejecutó. La información obtenida es guardada.
+    \item Se limpia la caché entre cada consulta realizada.
+    \item Una vez se ha completado la obtención de datos sin índices, se procede a realizar el mismo procedimiento pero con los índices prendidos. Para lograrlo se ejecutan los siguientes comandos:
+    \lstinputlisting[style=NiceStyle, language=sql]{consultas/indexesON.sql}
+    \item Se realiza el proceso de ejecución de consultas con \texttt{EXPLAIN ANALYZE} y limpieza de caché de nuevo, esta vez utilizando índices. Guardar los datos obtenidos.
+    
+    
+\end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Optimización de consultas}
-\iffalse
-\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/createIndice.sql}
-\fi
+Se crean índices con el fin de reducir los tiempos de las tres consultas en cuestión.
+\subsection{Consulta 1}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta1/createIndex.sql}
 
+\subsection{Consulta 2}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta2/createIndex.sql}
+
+\subsection{Consulta 3}
+\lstinputlisting[style=NiceStyle, language=sql]{consultas/Consulta3/createIndex.sql}
+
+\newpage
 \subsection{Planes de índices para Consulta 1}
-\iffalse
-\subsubsection{Ejecución con indices por default (PK) para 1000 datos}
-\begin{figure}[h!]
+Se muestran los diagramas internos de ejecución generados por PgAdmin. Posteriormente se muestran los resultados obtenidos al ejecutar la consulta con \texttt{EXPLAIN ANALYZE}.
+\subsubsection{Ejecución con índices por default (PK)}
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
-  \caption{Ejecución de la consulta 1 para 1000 registros}
-\end{figure} 
-\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_1000/conIndByDefault/QUERYPLAN.txt}
-
-\subsubsection{Ejecución con indices por default (PK) para 10000 datos}
-\begin{figure}[h!]
+  \includegraphics[width=300px]{consultas/Consulta1/SI.png}
+  \caption{Ejecución de la consulta 1 con índices por default}
+\end{figure}
+\subsubsection{Ejecución con índices creados}
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
-  \caption{Ejecución de la consulta 1 para 10000 registros}
+  \includegraphics[width=300px]{consultas/Consulta1/CI.png}
+  \caption{Ejecución de la consulta 1 con índices creados}
 \end{figure} 
-\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_10000/conIndByDefault/QUERYPLAN.txt}
 
-\subsubsection{Ejecución con indices por default (PK) para 100000 datos}
-\begin{figure}[h!]
+\subsubsection{Explicación y análisis - Con índices por default y con índices creados}
+\begin{enumerate}
+    \item Ejecución para 1000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta1/1000.txt}
+    \item Ejecución para 10000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta1/10000.txt}
+    \item Ejecución para 100000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta1/100000.txt}
+    \item Ejecución para 1000000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta1/1000000.txt}
+\end{enumerate}
+
+\subsection{Planes de índices para Consulta 2}
+Se muestran los diagramas internos de ejecuci ́on generados por PgAdmin.Posteriormente se muestran los resultados obtenidos al ejecutar la consulta con EXPLAIN ANALYZE.
+\subsubsection{Ejecución sin índices}
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=300px]{consultas/Consulta1/ExplainGraphical.png}
-  \caption{Ejecución de la consulta 1 para 100000 registros}
-\end{figure} 
-\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_100000/conIndByDefault/QUERYPLAN.txt}
-
-\subsubsection{Ejecución con indices por default (PK) para 1000000 datos}
-\begin{figure}[h!]
+  \includegraphics[width=300px]{consultas/Consulta2/SI.png}
+  \caption{Ejecución de la consulta 2 sin índices}
+\end{figure}
+\subsubsection{Ejecución con índices creados}
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=350px]{consultas/Consulta1/PS_1000000/ExplainGraphicalChanged.png}
-  \caption{Ejecución de la consulta 1 para 1000000 registros}
+  \includegraphics[width=300px]{consultas/Consulta2/CI.png}
+  \caption{Ejecución de la consulta 2 con índices creados}
 \end{figure} 
-\lstinputlisting[style=TableStyle]{consultas/Consulta1/PS_1000000/conIndByDefault/QUERYPLAN.txt}
-\fi
 
-\subsection{ Planes de índices para Consulta 2}
+\subsubsection{Explicación y análisis - Sin índices y con índices creados}
+\begin{enumerate}
+    \item Ejecución para 1000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta2/1000.txt}
+    \item Ejecución para 10000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta2/10000.txt}
+    \item Ejecución para 100000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta2/100000.txt}
+    \item Ejecución para 1000000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta2/1000000.txt}
+\end{enumerate}
 
-\subsection{ Planes de índices para Consulta 3}
+\subsection{Planes de índices para Consulta 3}
+Se muestran los diagramas internos de ejecuci ́on generados por PgAdmin.Posteriormente se muestran los resultados obtenidos al ejecutar la consulta con EXPLAIN ANALYZE.
+\subsubsection{Ejecución sin índices}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=300px]{consultas/Consulta3/SI.png}
+  \caption{Ejecución de la consulta 3 sin índices}
+\end{figure}
+\newpage
+\subsubsection{Ejecución con índices creados}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[width=300px]{consultas/Consulta3/CI.png}
+  \caption{Ejecución de la consulta 3 con índices creados}
+\end{figure} 
 
-\subsection{ Planes de índices para Consulta 4}
+\subsubsection{Explicación y análisis - Sin índices y con índices creados}
+\begin{enumerate}
+    \item Ejecución para 1000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta3/1000.txt}
+    \item Ejecución para 10000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta3/10000.txt}
+    \item Ejecución para 100000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta3/100000.txt}
+    \item Ejecución para 1000000 datos
+    \lstinputlisting[style=TableStyle]{consultas/Consulta3/1000000.txt}
+\end{enumerate}
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Plataforma de Pruebas}
+Los datos registrados en la siguiente tabla nos permitirán, en próximas investigaciones, comparar nuestros resultados. Estos valores nos servirán como métricas referenciales para alinear el desarrollo de proyectos futuros.
+
+
+\begin{table}[h]
+\footnotesize
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Item}                                   & \textbf{Detalle}              \\ \hline
+Sistema Operativo                               & Windows 10 Pro                \\ \hline
+RAM                                             & 8 Gb                          \\ \hline
+CPU                                             & Core i5-3470                  \\ \hline
+HDD Protocolo de Transferencia                  & SATA                          \\ \hline
+Modelo de disco sólido                          & ST1000DM003-1CH162 ATA Device \\ \hline
+HDD Capacidad                                   & 193 Gb                        \\ \hline
+HDD Tasa de Transferencia (Lectura / Escritura) & 540 Mbps / 410 Mbps           \\ \hline
+PostgreSQL                                      & 12.4                          \\ \hline
+PgAdmin                                         & Versión 4                     \\ \hline
+\end{tabular}
+\caption{Tabla de plataforma de pruebas para consulta 1}
+\end{table}
+
+
+\begin{table}[]
+\footnotesize
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Item}                                   & \textbf{Detalle}            \\ \hline
+Sistema Operativo                               & Windows 10                  \\ \hline
+RAM                                             & 12 Gb                       \\ \hline
+CPU                                             & Core i5-10210U              \\ \hline
+HDD Protocolo de Transferencia                  & SATA                        \\ \hline
+Modelo de disco sólido                          & KINGSTON RBUSNS8154P3128GJ1 \\ \hline
+HDD Capacidad                                   & 1 Tb                        \\ \hline
+HDD Tasa de Transferencia (Lectura / Escritura) & 540 Mbps / 410 Mbps         \\ \hline
+PostgreSQL                                      & 12.4                        \\ \hline
+PgAdmin                                         & Versión 4                   \\ \hline
+\end{tabular}
+\caption{Tabla de plataforma de pruebas para consulta 2}
+\label{tab:my-table}
+\end{table}
+\newpage
 \section{Medición de tiempos}
-\subsection{ Sin índices}
-\iffalse
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
-  1                  & 775                 \\ \hline
-  2                  & 861                 \\ \hline
-  3                  & 748                 \\ \hline
-  4                  & 749                 \\ \hline
-  5                  & 1031                \\ \hline
-  6                  & 924                 \\ \hline
-  7                  & 765                 \\ \hline
-  8                  & 1251                \\ \hline
-  9                  & 745                 \\ \hline
-  10                 & 743                 \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 1000 registros sin índices}
+Se realizaron las consultas por separado, repitiendo la ejecución un total de quince veces por cada esquema (1K, 10K, 100K y 1M).
+Los resultados obtenidos fueron resumidos y analizados en tablas y gráficos.
+\subsection{Sin índices}
+
+Se ejecutaron las consultas sin hacer uso de índices, y se halló el promedio de cada una.
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{SIN ÍNDICES: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+\multicolumn{1}{|l|}{}   & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}  \\
+\textbf{Consulta 1*}    & 1.165         & 9.445          & 122.262         & 1745.922     \\
+\textbf{Consulta 2}      & 0.603         & 7.023          & 124.800         & 472.665      \\
+\textbf{Consulta 3}      & 19.508        & 126.688        & 712.887         & 3267.110     \\ \hline
+\end{tabular}
+\caption{Tabla de consultas sin índice. *La consulta 1 fue realizada con índices default}
+\label{tab:my-table}
+\end{table}
+\newpage
+\subsection{Con índices}
+Después de finalizar la ejecución de consultas sin índices, procedemos a activar los índices, recopilando los datos obtenidos y hallando un promedio.
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{CON ÍNDICES: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+\multicolumn{1}{|l|}{}   & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}  \\
+\textbf{Consulta 1}      & 0.1321        & 0.177          & 0.426           & 3.931        \\
+\textbf{Consulta 2}      & 0.21          & 1.490          & 11.454          & 323.179      \\
+\textbf{Consulta 3}      & 3.5797        & 39.842         & 285.893         & 1550.183     \\ \hline
+\end{tabular}
+\caption{Tabla de consultas con índice}
+\label{tab:my-table}
 \end{table}
 
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
-  1                  & 10893               \\ \hline
-  2                  & 10090               \\ \hline
-  3                  & 8574                \\ \hline
-  4                  & 8408                \\ \hline
-  5                  & 8124                \\ \hline
-  6                  & 8727                \\ \hline
-  7                  & 8556                \\ \hline
-  8                  & 8195                \\ \hline
-  9                  & 8459                \\ \hline
-  10                 & 9169                \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 10000 registros sin índices}
+\subsection{Mediciones independientes}
+Para poder realizar un análisis más profundo de cada consulta respecto a los distintos datasets, se muestran los datos obtenidos por cada consulta.
+
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{CONSULTA 1: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+                          & \textbf{1K}   & \textbf{10K}  & \textbf{100K}  & \textbf{1M}  \\
+\textbf{Índice default}   & 1.165         & 9.445         & 122.262        & 1745.922    \\
+\textbf{Con Índice}       & 0.132         & 0.177         & 0.426          & 3.931        \\ \hline
+\end{tabular}
+\caption{Tabla de ejecución de consulta 1 con índice creado y con índice default}
+\label{tab:my-table}
 \end{table}
 
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
-  1                  & 161137              \\ \hline
-  2                  & 171459              \\ \hline
-  3                  & 163214              \\ \hline
-  4                  & 146310              \\ \hline
-  5                  & 160778              \\ \hline
-  6                  & 126488              \\ \hline
-  7                  & 151738              \\ \hline
-  8                  & 174668              \\ \hline
-  9                  & 153993              \\ \hline
-  10                 & 169897              \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 100000 registros sin índices}
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{CONSULTA 2: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+                       & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}   \\
+\textbf{Sin índice}    & 0.603         & 7.023          & 124.800         & 472.665       \\
+\textbf{Con Índice}    & 0.214         & 1.490          & 11.454          & 323.179       \\ \hline
+\end{tabular}
+\caption{Tabla de ejecución de consulta 2 con índice y sin índice}
+\label{tab:my-table}
 \end{table}
 
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 3} \\ \hline
-  1                  & 935584              \\ \hline
-  2                  & 1081505             \\ \hline
-  3                  & 1102141             \\ \hline
-  4                  & 1151704             \\ \hline
-  5                  & 1096683             \\ \hline
-  6                  & 1106174             \\ \hline
-  7                  & 1115339             \\ \hline
-  8                  & 1108338             \\ \hline
-  9                  & 1106591             \\ \hline
-  10                 & 1094102             \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 1000000 registros sin índices}
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{CONSULTA 3: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+                       & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}   \\
+\textbf{Sin índice}    & 19.508        & 126.688        & 712.887         & 3267.110      \\
+\textbf{Con Índice}    & 3.580         & 39.842         & 285.893         & 1550.183     \\ \hline
+\end{tabular}
+\caption{Tabla de ejecución de consulta 3 con índice y sin índice}
+\label{tab:my-table}
 \end{table}
-
-\pagebreak
-\pagebreak
-\fi
-\subsection{ Con índices}
-\iffalse
-\subsubsection*{1000 datos}
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
-  1                  & 139                  & 2733                 & 717                 & 149                  \\ \hline
-  2                  & 129                  & 1158                 & 615                 & 115                  \\ \hline
-  3                  & 134                  & 2009                 & 567                 & 174                  \\ \hline
-  4                  & 171                  & 973                  & 614                 & 100                  \\ \hline
-  5                  & 171                  & 987                  & 962                 & 111                  \\ \hline
-  6                  & 206                  & 948                  & 561                 & 95                   \\ \hline
-  7                  & 141                  & 2234                 & 981                 & 100                  \\ \hline
-  8                  & 143                  & 1127                 & 560                 & 143                  \\ \hline
-  9                  & 127                  & 925                  & 602                 & 102                  \\ \hline
-  10                 & 138                  & 987                  & 826                 & 98                   \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 1000 registros con índices}
-\end{table}
-\pagebreak
-\textbf{*: } Los índices de dichas consultas fueron generados automáticamente debido a que se trataron de consultas a llaves primarias.
-
-\subsubsection*{10000 datos}
-\begin{table}[]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
-  1                  & 1274                 & 10640                & 7372                & 1218                 \\ \hline
-  2                  & 1069                 & 24951                & 7202                & 809                  \\ \hline
-  3                  & 996                  & 9696                 & 6493                & 943                  \\ \hline
-  4                  & 1504                 & 9860                 & 6187                & 831                  \\ \hline
-  5                  & 1014                 & 9393                 & 6243                & 775                  \\ \hline
-  6                  & 990                  & 9057                 & 6326                & 789                  \\ \hline
-  7                  & 1036                 & 10117                & 6268                & 788                  \\ \hline
-  8                  & 972                  & 8867                 & 6612                & 774                  \\ \hline
-  9                  & 1039                 & 9491                 & 6843                & 802                  \\ \hline
-  10                 & 1041                 & 25504                & 6666                & 778                  \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 10000 registros con indices}
-\end{table}
-
-\subsubsection*{100000 datos}
-\begin{table}[]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
-  1                  & 10510                & 251633               & 145873              & 8237                 \\ \hline
-  2                  & 9200                 & 181925               & 130947              & 8022                 \\ \hline
-  3                  & 8955                 & 201314               & 130322              & 8275                 \\ \hline
-  4                  & 8882                 & 180551               & 115559              & 7742                 \\ \hline
-  5                  & 8781                 & 201032               & 106950              & 8068                 \\ \hline
-  6                  & 8754                 & 224053               & 113188              & 7540                 \\ \hline
-  7                  & 9510                 & 256456               & 115607              & 10460                \\ \hline
-  8                  & 8595                 & 208429               & 104065              & 7273                 \\ \hline
-  9                  & 25229                & 201450               & 107654              & 25205                \\ \hline
-  10                 & 25274                & 194192               & 82748               & 8097                 \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 100000 registros con indices}
-\end{table}
-
-\subsubsection*{1000000 datos}
-\begin{table}[]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|}
-  \hline
-  \textbf{Iteración} & \textbf{Consulta 1*} & \textbf{Consulta 2*} & \textbf{Consulta 3} & \textbf{Consulta 4*} \\ \hline
-  1                  & 57879                & 9062130              & 985364              & 59813                \\ \hline
-  2                  & 60410                & 1814157              & 957204              & 54529                \\ \hline
-  3                  & 56977                & 1850655              & 945955              & 54549                \\ \hline
-  4                  & 86084                & 1512095              & 945955              & 73334                \\ \hline
-  5                  & 79874                & 1580926              & 942538              & 55499                \\ \hline
-  6                  & 56939                & 1827148              & 1026727             & 53587                \\ \hline
-  7                  & 82606                & 1550428              & 963636              & 53682                \\ \hline
-  8                  & 57698                & 1482377              & 960600              & 56347                \\ \hline
-  9                  & 57590                & 1613899              & 1008798             & 54548                \\ \hline
-  10                 & 56873                & 1417192              & 966607              & 59824                \\ \hline
-  \end{tabular}
-  \caption{Mediciones de tiempo para 1000000 registros con indices}
-  \label{tab:my-table}
-\end{table}
-\fi
 
 \section{Resultados}
-\subsection{Consulta 1}
-\iffalse
-\begin{figure}[h!]
-  \begin{center}
-    \begin{tikzpicture}
-      \begin{axis}[
-          grid=major, 
-          grid style={dashed,gray!30},
-          xlabel=N,
-          ylabel=TIME (S),
-          legend style={at={(0.5,-0.4)},anchor=north},
-          x tick label style={rotate=90,anchor=east}
-        ]
-        \addplot coordinates{
-            (1000,132.8)
-            (10000,1093.5)
-            (100000, 12269)
-            (1000000,65293)
-        }; 
-        \legend{con índice por default al ser llave primaria}
-      \end{axis}
-    \end{tikzpicture}
-    \caption{Tiempos de ejecución - Consulta 1.}
-  \end{center}
-\end{figure}
-\fi
 
+\subsection{Consulta 1}
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=0.7]{consultas/Consulta1/grafico1.png}
+\end{figure} 
+
+Para la primera consulta 1 se puede apreciar en la figura 3 que no existe
+una diferencia apreciable entre las consultas con ´ındices y sin ´ındices cuando
+el tama˜no del dataset es menor 10k, a partir de 10k en adelante ya se puede
+observar una diferencia que va aumentando en relaci´on al tama˜no del dataset.
+
+\newpage
 \subsection{ Consulta 2}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.7]{consultas/Consulta2/grafico2.png}
+\end{figure} 
+
+Para esta segunda consulta a diferencia de la consulta anterior solo se puede
+apreciar una ligera diferencia cuando el tama˜no del dataset es de 100k.
+
+\newpage
 \subsection{ Consulta 3}
 
-\subsection{ Consulta 4}
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=0.7]{consultas/Consulta3/grafico3.png}
+\end{figure} 
 
+Para esta consulta al igual que en las consultas anteriores no hay una diferencia apreciable cuando el tama˜no del dataset es menor a 10k y s´ı cuando pasa
+este tama˜no como se puede ver para cuando el tama˜no es de 100k y mucho m´as
+a´un en 1000k.
 
+\newpage
 \section{Análisis y Discusión}
 
+\begin{table}[h]
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{PROMEDIO: Tiempo de ejecución (ms) vs tamaño del dataset}} \\ \hline
+                      & \textbf{1K}   & \textbf{10K}   & \textbf{100K}   & \textbf{1M}  \\
+\textbf{Sin Índice}   & 9.473         & 47.719         & 319.983         & 1828.566     \\
+\textbf{Con Índice}   & 1.31          & 13.836         & 99.258          & 625.764      \\
+\textbf{Consulta 3}   & 3.5797        & 39.842         & 285.893         & 1550.183     \\ \hline
+\end{tabular}
+\caption{Tabla de promedio de las tres consultas}
+\label{tab:my-table}
+\end{table}
 
+blablabla
+
+\newpage
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=0.7]{consultas/graficoPromedioBase.png}
+\end{figure} 
+
+blablabla
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=0.7]{consultas/graficoPromedioPolinomio.png}
+\end{figure} 
+
+blablabla
+
+\begin{equation}
+    SI = F(x) = 368x^2 - 530x + 59.6
+\end{equation}
+\begin{equation}
+    CI = G(x) = 128x^2 - 190x + 19.7
+\end{equation}
+bla bla bla
+\begin{equation}
+    SI' = F'(x) = 736x - 530
+\end{equation}
+\begin{equation}
+    CI' = G'(x) = 256x - 190
+\end{equation}
+bla bla bla
 
 \chapter{Conclusiones}
-\fi
+
 
 \appendix
 \appendixpage
